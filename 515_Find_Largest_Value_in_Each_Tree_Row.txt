@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> result=new ArrayList<>();
+        Map<Integer, Integer> map=new HashMap<>();
+        function(root, map, 0);
+        for(Map.Entry<Integer,Integer> entry: map.entrySet())
+        {
+            result.add(entry.getValue());
+        }
+        return result;
+    }
+    private void function(TreeNode node, Map<Integer, Integer> map, int level)
+    {
+        if(node!=null)
+        {
+            if(map.containsKey(level))
+            {
+                if(node.val>map.get(level))
+                    map.put(level, node.val);
+            }
+            else
+            {
+                map.put(level,node.val);
+            }
+            function(node.left, map, level+1);
+            function(node.right, map, level+1);
+        }
+    }
+}
