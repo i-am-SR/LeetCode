@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        Queue<TreeNode> q=new LinkedList<>();
+        int i,parent_x=0,parent_y=0;
+        boolean x_found=false, y_found=false,result=false;
+        q.add(root);
+        while(!q.isEmpty())
+        {
+            int end=q.size();
+            for(i=0;i<end;i++)
+            {
+                TreeNode temp=q.remove();
+                if(temp.val==x)
+                    x_found=true;
+                if(temp.val==y)
+                    y_found=true;
+                if(x_found && y_found)
+                {
+                    if(parent_x!=parent_y)
+                        result=true;
+                    break;
+                }
+                if(temp.left!=null)
+                {
+                    q.add(temp.left);
+                    if(temp.left.val==x)
+                        parent_x=temp.val;
+                    if(temp.left.val==y)
+                        parent_y=temp.val;
+                }
+                if(temp.right!=null)
+                {
+                    q.add(temp.right);
+                    if(temp.right.val==x)
+                        parent_x=temp.val;
+                    if(temp.right.val==y)
+                        parent_y=temp.val;
+                }
+            }
+            if(result || x_found || y_found)
+                break;
+        }
+        return result;
+    }
+}
