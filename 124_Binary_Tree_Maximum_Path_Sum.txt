@@ -10,34 +10,16 @@
 class Solution {
     private int maxPathSum=Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
-        int temp=function(root);
-        return Math.max(maxPathSum, temp);
+        function(root);
+        return maxPathSum;
     }
     private int function(TreeNode node)
     {
-        if(node.val>maxPathSum)
-            maxPathSum=node.val;
-        if(node.left==null && node.right==null)
-            return node.val;
-        int left,right,x;
-        if(node.left!=null)
-            left=function(node.left);
-        else
-            left=0;
-        if(node.right!=null)
-            right=function(node.right);
-        else 
-            right=0;
-        if(left+right+node.val>maxPathSum)
-            maxPathSum=left+right+node.val;
-        if(left<=0 && right<=0)
-            return node.val;
-        else
-        {
-            x=(left>right)?(node.val+left):(node.val+right);
-            if(x>maxPathSum)
-                maxPathSum=x;
-            return x;
-        }
+        if(node==null)
+            return 0;
+        int left=Math.max(0, function(node.left));
+        int right=Math.max(0, function(node.right));
+        maxPathSum=Math.max(maxPathSum, left+right+node.val);
+        return (node.val+Math.max(left,right));
     }
 }
