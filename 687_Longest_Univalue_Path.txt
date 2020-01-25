@@ -1,0 +1,28 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private int maxPath=0;
+    public int longestUnivaluePath(TreeNode root) {
+        function(root, Integer.MIN_VALUE+22);  // A random number taken that will most likely not be the value of the root node.
+        return maxPath;
+    }
+    private int function(TreeNode node, int parent)
+    {
+        if(node==null)
+            return 0;
+        int left= function(node.left, node.val);
+        int right= function(node.right, node.val);
+        maxPath=Math.max(left+right,maxPath);
+        if(node.val!=parent)
+            return 0;
+        else
+            return Math.max(left,right)+1;
+    }
+}
