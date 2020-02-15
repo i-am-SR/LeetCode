@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private int p_count=0;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        TreeNode root=null;
+        if(preorder.length!=0)
+            root=function(preorder, inorder, 0, inorder.length-1);
+        return root;
+    }
+    private TreeNode function(int[] preorder, int[] inorder, int i_start, int i_end)
+    {
+        int i;
+        TreeNode temp=new TreeNode(preorder[p_count]);
+        for(i=i_start;i<=i_end;i++)
+        {
+            if(inorder[i]==preorder[p_count])
+                break;
+        }
+        if(i==i_start)
+            temp.left=null;
+        else
+        {
+            p_count++;
+            temp.left=function(preorder, inorder, i_start, i-1);   
+        }
+        if(i==i_end)
+            temp.right=null;
+        else
+        {
+            p_count++;
+            temp.right=function(preorder, inorder, i+1, i_end);
+        }
+        return temp;
+    }
+}

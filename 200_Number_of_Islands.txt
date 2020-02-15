@@ -1,0 +1,35 @@
+class Solution {
+    //dekha
+    private char [][]grid_new;
+    public int numIslands(char[][] grid) {
+        int result=0,i,j;
+        grid_new=grid;
+        if(grid.length==0 || grid[0].length==0)
+            return result;
+        for(i=0;i<grid_new.length;i++)
+        {
+            for(j=0;j<grid_new[0].length;j++)
+            {
+                if(grid_new[i][j]=='1')
+                {
+                    function(i,j);
+                    result++;
+                }
+            }
+        }
+        return result;        
+    }
+    private void function(int i, int j)
+    {
+        if(i>=grid_new.length || i<0 || j<0 || j>=grid_new[0].length || grid_new[i][j]=='0')
+            return;
+        else
+        {
+            grid_new[i][j]='0';
+            function(i,j+1);
+            function(i+1,j);
+            function(i,j-1);
+            function(i-1,j);
+        }
+    }
+}

@@ -1,0 +1,22 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int result=0,start=0,end=0,i;
+        for(i=1;i<prices.length;i++)
+        {
+            if(prices[i]>=prices[end])
+                end++;
+            else if(prices[i]<prices[end])
+            {
+                if(end>start)
+                {
+                    result+=prices[end]-prices[start];    
+                }
+                start=i;
+                end=i;    
+            }
+        }
+        if(prices.length>1 && prices[prices.length-1]>prices[start])
+            result+=prices[prices.length-1]-prices[start];
+        return result;
+    }
+}

@@ -1,0 +1,22 @@
+class Solution {
+    //dekha
+    private Map<String, PriorityQueue<String>> map=new HashMap<>();
+    private LinkedList<String> result=new LinkedList<>();
+    public List<String> findItinerary(List<List<String>> tickets) {
+        for(int i=0;i<tickets.size();i++)
+        {
+            map.putIfAbsent(tickets.get(i).get(0), new PriorityQueue<String>());
+            map.get(tickets.get(i).get(0)).add(tickets.get(i).get(1));
+        }
+        //System.out.print(map);
+        function("JFK");
+        return result;
+    }
+    private void function(String s)
+    {
+        PriorityQueue<String> pQ=map.get(s);
+        while(pQ!= null && !pQ.isEmpty())
+            function(pQ.poll());
+        result.addFirst(s);
+    }
+}

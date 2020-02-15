@@ -1,0 +1,19 @@
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        //dekha
+        int i,i1=Integer.MAX_VALUE,i2=Integer.MAX_VALUE;
+        if(nums.length>3)
+        {
+            for(i=0;i<nums.length;i++)
+            {
+                if(nums[i]<=i1)
+                    i1=nums[i];
+                else if(nums[i]<=i2)
+                    i2=nums[i];
+                else
+                    return true;
+            }
+        }
+        return false;
+    }
+}
