@@ -1,0 +1,26 @@
+class FreqStack {
+    //Dekha
+    Map<Integer, Stack<Integer>> map = new HashMap<>();
+    Map<Integer, Integer> freq = new HashMap<>();
+    int max_freq = 0;
+    public FreqStack() {
+        
+    }
+    
+    public void push(int x) {
+        freq.put(x, freq.getOrDefault(x,0) + 1);
+        int f = freq.get(x);
+        max_freq = Math.max(max_freq, f);
+        if(!map.containsKey(f))
+            map.put(f, new Stack<Integer>());
+        map.get(f).push(x);
+    }
+    
+    public int pop() {
+        int x = map.get(max_freq).pop();
+        freq.put(x, freq.get(x) - 1);
+        if(map.get(max_freq).size() == 0)
+            max_freq--;
+        return x;        
+    }
+}

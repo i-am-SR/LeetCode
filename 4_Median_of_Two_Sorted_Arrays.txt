@@ -1,0 +1,30 @@
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if(nums1.length>nums2.length) // Have the smaller matrix first 
+            return findMedianSortedArrays(nums2, nums1);
+        int len1 = nums1.length;
+        int len2 = nums2.length;
+        int lo = 0, hi = len1;
+        while(lo <= hi) //Customized binary search on 2 arrays divding it into left partition and right partition
+        {
+            int partX = ((hi - lo)/2) + lo; //partition boundary for first Array
+            int partY = ((len1 + len2 + 1)/2) - partX; // partition boundary for first Array. This is done to keep the two partitions with equal number of items
+            int maxLeft1 = (partX == 0) ? Integer.MIN_VALUE: nums1[partX - 1]; //if left Part of first array is empty, make maxLeftX as -inf
+            int minRight1 = (partX == len1) ? Integer.MAX_VALUE: nums1[partX]; //if right Part of first array is empty, make minRightX as +inf
+            int maxLeft2 = (partY == 0) ? Integer.MIN_VALUE: nums2[partY - 1]; //if left Part of 2nd array is empty, make maxLeftY as -inf
+            int minRight2 = (partY == len2) ? Integer.MAX_VALUE: nums2[partY]; //if right Part of 2nd array is empty, make minRightY as +inf
+            if((maxLeft1 <= minRight2) && (maxLeft2 <= minRight1)) //condition for correct partition
+            {
+                if((len1 + len2)%2 == 0) //even number of total items - median is avg of middle elements
+                    return ((double)Math.max(maxLeft1,maxLeft2)+ Math.min(minRight1, minRight2))/2;
+                else    // return middle element
+                    return (double)Math.max(maxLeft1,maxLeft2);
+            }
+            else if(maxLeft1 > minRight2) //we need to move th partition to the left
+                hi = partX - 1;
+            else //we need to move th partition to the right
+                lo = partX + 1;
+        }
+        throw new IllegalArgumentException(); // If the arrays are nor sorted we will reach here
+    }
+}

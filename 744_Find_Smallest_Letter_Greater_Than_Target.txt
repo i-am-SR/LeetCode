@@ -1,0 +1,23 @@
+class Solution {
+    public char nextGreatestLetter(char[] letters, char target) {
+        int len=letters.length;
+        if((target - '0') >= (letters[len-1] - '0') || ((target - '0') < (letters[0] - '0'))) //If the target is smaller than the first letter or greater than equals to the last letter
+            return letters[0];
+        int lo = 0,hi=len;
+        while(lo<=hi)
+        {
+            int mid = ((hi-lo)/2) + lo;
+            if((mid<len-1) && letters[mid] == target && letters[mid+1] != letters[mid]) //If target is same as mid and mid+1 is not same as mid
+            {
+                    return letters[mid+1];
+            }
+            if((mid> 0) && (letters[mid] - '0') > (target - '0') && (letters[mid-1] - '0') < (target  - '0')) //if target is less than mid and greater than mid-1
+                return letters[mid];
+            if((letters[mid] - '0') > (target - '0'))
+                hi = mid - 1;
+            if((letters[mid] - '0') <= (target - '0'))
+                lo = mid + 1;  
+        }
+        return '1';
+    }
+}
