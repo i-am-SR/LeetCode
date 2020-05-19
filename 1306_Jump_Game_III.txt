@@ -1,0 +1,21 @@
+class Solution {
+    public boolean canReach(int[] arr, int start) { // BFS solution
+        boolean[] visited = new boolean[arr.length];
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(start);
+        while(!q.isEmpty())
+        {
+            int curr = q.poll();
+            if(arr[curr] == 0)
+                return true;
+            if(visited[curr])
+                continue;
+            visited[curr] = true;
+            if(curr + arr[curr] >=0 && curr + arr[curr] < arr.length)
+                q.offer(curr + arr[curr]);               
+            if(curr - arr[curr] >=0 && curr - arr[curr] < arr.length)
+                q.offer(curr - arr[curr]);
+        }
+        return false;
+    }
+}
