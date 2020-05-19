@@ -1,0 +1,22 @@
+class Solution {
+    public int characterReplacement(String s, int k) {
+        //Dekha
+        int lo=0,hi=0,result=0,maxElem=0;
+        int []charCount= new int[26];
+        for(hi=0;hi<s.length();hi++)
+        {
+            charCount[s.charAt(hi)-'A']+=1;
+            maxElem= Math.max(maxElem, charCount[s.charAt(hi)-'A']);
+            if(hi-lo+1-maxElem > k) // current window cant be the solution
+            {
+                charCount[s.charAt(lo)-'A']-=1;
+                lo++;
+            }
+            else
+            {
+                result = Math.max(result, hi-lo+1);
+            }
+        }
+        return result;
+    }
+}

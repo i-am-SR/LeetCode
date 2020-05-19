@@ -1,0 +1,36 @@
+class Solution {
+    public int openLock(String[] deadends, String target) { // BFS approach
+        Queue<String> q = new LinkedList<>();
+        Set<String> visited = new HashSet<>(Arrays.asList(deadends));
+        q.add("0000");
+        int result = 0;
+        while(!q.isEmpty())
+        {
+            int nodesAtCurrDepth = q.size(); // we will poll all the nodes at current depth and then increment result by 1;
+            while(nodesAtCurrDepth>0)
+            {
+                String curr = q.poll();
+                //System.out.println("Curr = "+ curr);
+                if(visited.contains(curr))
+                {
+                    nodesAtCurrDepth--;
+                    //System.out.println("Discarded");
+                    continue;
+                }
+                visited.add(curr);
+                if(target.equals(curr))
+                    return result;
+                for(int i=0;i<4;i++)
+                {
+                    String comb1 = curr.substring(0,i) + (curr.charAt(i) == '9' ? 0 : curr.charAt(i) - '0' + 1) + curr.substring(i+1,4);
+                    String comb2 = curr.substring(0,i) + (curr.charAt(i) == '0' ? 9 : curr.charAt(i) - '0' - 1) + curr.substring(i+1,4);
+                    q.offer(comb1);
+                    q.offer(comb2);
+                }
+                nodesAtCurrDepth--;
+            }
+            result++;
+        }
+        return -1;
+    }
+}

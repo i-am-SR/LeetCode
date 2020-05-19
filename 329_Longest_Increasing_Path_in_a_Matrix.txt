@@ -1,0 +1,45 @@
+class Solution {
+    private static int[][] direction = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+    public int longestIncreasingPath(int[][] matrix) { // DFS solution with memoization
+        int len = matrix.length;
+        if(len == 0)
+            return 0;
+        int wid = matrix[0].length;
+        if(wid == 0)
+            return 0;
+        int result = 0;
+        int[][] mem = new int[len][wid]; // matrix for memoization
+        for(int i = 0; i < len ; i++)
+        {
+            for(int j = 0; j < wid; j++)
+            {
+                result = Math.max(result, dfs(i, j, len, wid, matrix, mem));
+            }
+        }
+        /*for(int i = 0; i < len ; i++)
+        {
+            for(int j = 0; j < wid; j++)
+            {
+                System.out.print(mem[i][j]+ " ");
+            }
+            System.out.println();
+        }*/
+        return result + 1;
+    }
+    private int dfs(int i, int j, int len, int wid, int[][] matrix, int[][] mem)
+    {
+        if(mem[i][j] != 0)
+            return mem[i][j];
+        int result = 0;
+        for(int[] dir: direction)
+        {
+            if((i + dir[0] >= 0) && (i + dir[0] < len) && (j + dir[1] >= 0) && (j + dir[1] < wid ) && matrix[i + dir[0]][j + dir[1]] > matrix[i][j])
+            {
+                mem[i][j] = Math.max(mem[i][j], dfs(i + dir[0], j + dir[1], len, wid, matrix, mem) + 1);
+                result = Math.max(result, mem[i][j]);
+            }
+        }
+        mem[i][j] = result;
+        return mem[i][j];
+    }
+}

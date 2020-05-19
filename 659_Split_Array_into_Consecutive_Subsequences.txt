@@ -1,0 +1,29 @@
+class Solution {
+    public boolean isPossible(int[] nums) {
+        Map<Integer, Integer> freqMap = new HashMap<>(); // stores the frequency of each element
+        Map<Integer, Integer> seqJoinMap = new HashMap<>(); // stores the number of preexisting valid sequences a number can join (if any)
+        for(int i:nums)
+            freqMap.put(i, freqMap.getOrDefault(i, 0) + 1);
+        for(int i:nums)
+        {
+            if(freqMap.get(i) == 0) //if all copies of the item are already a part of a valid sequence
+                continue;
+            if(seqJoinMap.containsKey(i) && seqJoinMap.get(i) > 0)  //if the item can join a preexisting valid sequence
+            {
+                seqJoinMap.put(i, seqJoinMap.get(i) - 1); //decrement the number of sequences it can join now
+                freqMap.put(i, freqMap.get(i) - 1); //decrement its frequency
+                seqJoinMap.put(i+1, seqJoinMap.getOrDefault(i+1, 0) + 1); //the next integer (i+1) can be added to this sequence so, imcrement its value in the sequence join map
+            }
+            else if((freqMap.get(i) > 0) && (freqMap.containsKey(i+1) && freqMap.get(i+1) > 0) && (freqMap.containsKey(i+2) && freqMap.get(i+2) > 0)) // create our own sequence but we need to have unused i+1 and i+2
+            {
+                freqMap.put(i, freqMap.get(i) - 1); //decrement its frequency
+                freqMap.put(i+1, freqMap.get(i+1) - 1); //decrement its frequency
+                freqMap.put(i+2, freqMap.get(i+2) - 1); //decrement its frequency
+                seqJoinMap.put(i+3, seqJoinMap.getOrDefault(i+3, 0) + 1); //the next integer (i+3) can be added to this sequence so, imcrement its value in the sequence join map
+            }
+            else    //cant forn a subsequence with i
+                return false;
+        }
+        return true;        
+    }
+}

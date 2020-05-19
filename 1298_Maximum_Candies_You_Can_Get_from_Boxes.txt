@@ -1,0 +1,39 @@
+class Solution {
+    public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        int result = 0;
+        int visited[] = new int[status.length];
+        boolean accessible[] = new boolean[status.length];
+        
+        Queue<Integer> q = new LinkedList<>();
+        int i;
+        for(i = 0;i < initialBoxes.length; i++)
+        {
+            accessible[initialBoxes[i]] = true;
+            if(status[initialBoxes[i]] == 1)
+            {
+                q.offer(initialBoxes[i]);
+            }
+        }
+        while(!q.isEmpty())
+        {
+            int curr = q.poll();
+            if(visited[curr] == 1)
+                continue;
+            visited[curr] = 1;
+            result += candies[curr];
+            for(int box: containedBoxes[curr])
+            {
+                accessible[box] = true;
+                if(accessible[box] && status[box]==1)
+                    q.offer(box);
+            }
+            for(int key: keys[curr])
+            {
+                status[key] = 1;
+                if(accessible[key] && status[key]==1)
+                    q.offer(key);
+            }  
+        }
+        return result;
+    }
+}

@@ -1,0 +1,38 @@
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) { // BFS solution
+        Queue<int[]> q = new LinkedList<>();
+        int i,j;
+        q.add(new int[]{0,0});
+        int result = 1;
+        while(!q.isEmpty())
+        {
+            int nodesAtCurrDepth = q.size();
+            while(nodesAtCurrDepth > 0)
+            {
+                int[] curr = q.poll();
+                
+                if(grid[curr[0]][curr[1]] == 1)
+                {
+                    nodesAtCurrDepth--;
+                    continue;
+                }
+                grid[curr[0]][curr[1]] = 1; // we used the grid matrix as the visited set. whatever is 1 is visited or invalid 
+                if(curr[0] == grid.length - 1 && curr[1] == grid[0].length - 1)
+                    return result;
+                for(int x = -1; x <= 1; x++)
+                {
+                    for(int y = -1; y <= 1; y++)
+                    {
+                        int new_x = curr[0]+x;
+                        int new_y = curr[1]+y;
+                        if(0 <= new_x && new_x < grid.length && 0 <= new_y && new_y < grid[0].length && !(x == 0 && y == 0))
+                            q.offer(new int[]{new_x, new_y});
+                    }
+                }
+                nodesAtCurrDepth--;
+            }
+            result++;  
+        }
+        return -1;
+    } 
+}

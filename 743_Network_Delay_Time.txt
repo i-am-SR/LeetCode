@@ -1,0 +1,31 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int N, int K) {
+        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>(); 
+        for(int []edge: times) // create graph
+        {
+            graph.putIfAbsent(edge[0], new HashMap<Integer, Integer>());
+            graph.get(edge[0]).put(edge[1], edge[2]);
+        }
+        Set<Integer> visited = new HashSet<Integer>(); // set of visited node
+        Queue<int []> pq= new PriorityQueue<>((a,b) -> (a[1] - b[1])); // Priority queue for Djikstra's algo that has no definite goal node. Will try to expand all nodes that it can
+        pq.add(new int[]{K, 0});
+        int currTime = 0;
+        while(!pq.isEmpty())
+        {
+            int []curr = pq.poll();
+            if(visited.contains(curr[0]))
+                continue;
+            visited.add(curr[0]);
+            currTime = curr[1]; // It is importatant that this is after the continue statement
+            N -= 1;
+            if(graph.containsKey(curr[0]))
+            {
+                for(Map.Entry<Integer,Integer> entry: graph.get(curr[0]).entrySet())
+                {
+                    pq.add(new int[]{entry.getKey(), currTime + entry.getValue()});
+                }
+            }
+        }
+        return N == 0 ? currTime : -1; // Check if all nodes are visited
+    }
+}

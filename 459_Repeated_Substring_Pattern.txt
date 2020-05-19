@@ -1,0 +1,27 @@
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        int i, len = s.length();
+        for(i = len/2;i>0;i--)
+        {
+            if(len%i==0)
+            {
+                String substr = s.substring(0,i);
+                if(isCopy(substr, s))
+                    return true;
+            }
+        }
+        return false;
+    }
+    private boolean isCopy(String substr, String s)
+    {
+        if(s.startsWith(substr))
+        {
+            if(substr.length() == s.length())
+                return true;
+            else
+                return isCopy(substr, s.substring(substr.length(),s.length()));
+        }
+        else
+            return false;
+    }
+}

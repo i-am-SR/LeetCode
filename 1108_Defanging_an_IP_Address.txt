@@ -1,0 +1,16 @@
+class Solution {
+    public String defangIPaddr(String address) {
+        int index= address.indexOf(".");
+        String s1="",s2 = address, result= "";
+        while(index != -1)
+        {
+            s1= s2.substring(0, index);
+            s2= s2.substring(index+1,s2.length());
+            result += s1;
+            result += "[.]";
+            index= s2.indexOf(".");
+        }
+        result += s2;
+        return result;
+    }
+}
