@@ -1,0 +1,78 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+	//Can be improved
+        int result = 1;
+        if(!wordList.contains(endWord))
+            return 0;
+        Queue<String> q = new LinkedList<>();
+        Map<String, List<String>> map = similarWords(beginWord, wordList);
+        q.offer(beginWord);
+        Set<String> visited = new HashSet<String>();
+        while(!q.isEmpty())
+        {
+            int size = q.size();
+            while(size>0)
+            {
+                size--;
+                String curr = q.poll();
+                visited.add(curr);
+                List<String> l = map.get(curr);
+                for(int i=0;i<l.size();i++)
+                {
+                    if(!visited.contains(l.get(i)))
+                    {
+                        if(l.get(i).equals(endWord))
+                            return result+1;
+                        q.offer(l.get(i));
+                    }
+                }
+            }
+            result++;
+        }
+        return 0;
+    }
+    private Map<String, List<String>> similarWords(String curr, List<String> wordList)
+    {
+        Map<String, List<String>> map = new HashMap<>();
+        List<String> l= new ArrayList<>();
+        for(int i=0;i<wordList.size();i++)
+        {
+            String temp = wordList.get(i);
+            if(curr.length() != temp.length())
+                continue;
+            int uncommonChars = 0, j = 0;
+            while(uncommonChars < 2 && j < curr.length())
+            {
+                if(curr.charAt(j) != temp.charAt(j++))
+                    uncommonChars++;
+            }
+            if(uncommonChars == 1)
+            l.add(temp);
+        }
+        map.put(curr, l);
+        for(int i=0;i<wordList.size()-1;i++)
+        {
+            for(int j=i+1;j<wordList.size();j++)
+            {
+                String s1 = wordList.get(i);
+                String s2 = wordList.get(j);
+                if(s1.length() != s2.length())
+                    continue;
+                int uncommonChars = 0, k = 0;
+                while(uncommonChars < 2 && k < s1.length())
+                {
+                    if(s1.charAt(k) != s2.charAt(k++))
+                        uncommonChars++;
+                }
+                if(uncommonChars == 1)
+                {   
+                    map.putIfAbsent(s1, new ArrayList<String>());
+                    map.putIfAbsent(s2, new ArrayList<String>());
+                    map.get(s1).add(s2);
+                    map.get(s2).add(s1);
+                }
+            }
+        }
+        return map;
+    }
+}
