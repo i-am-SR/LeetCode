@@ -1,0 +1,22 @@
+class Solution {
+    public String findReplaceString(String S, int[] indexes, String[] sources, String[] targets) {
+        String result = "";
+        int charIndex[] = new int[S.length()]; // stores the index+1 from the indexes array in the index of the String S if it has to be replaced
+        for(int i = 0; i < indexes.length; i++)
+        {
+            if(S.startsWith(sources[i], indexes[i]))    //If we can find sources[i] at indexes[i] then update charIndex
+                charIndex[indexes[i]] = i+1;
+        }
+        for(int i=0; i<S.length(); i++)
+        {
+            if(charIndex[i] > 0)
+            {
+                result = result + targets[charIndex[i]-1];
+                i += sources[charIndex[i]-1].length() - 1;
+            }
+            else
+                result = result + S.charAt(i);
+        }
+        return result;
+    }
+}
