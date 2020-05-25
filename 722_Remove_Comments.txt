@@ -1,0 +1,39 @@
+class Solution {
+    public List<String> removeComments(String[] source) {
+        List<String> result= new ArrayList<>();
+        boolean commInProg = false; 
+        StringBuilder temp = new StringBuilder(); // Using StringBuilder instead of String improved runtime
+        for(String s: source)
+        {
+            for(int i =0; i < s.length(); i++)
+            {
+                if(commInProg)
+                {
+                    if(i<s.length()-1 && s.charAt(i) == '*' && s.charAt(i+1) == '/')
+                    {
+                        commInProg = false;
+                        i++;
+                    }
+                }
+                else 
+                {
+                    if(i<s.length()-1 && (s.charAt(i) == '/' && s.charAt(i+1) == '/'))
+                        break;
+                    else if(i<s.length()-1 && (s.charAt(i) == '/' && s.charAt(i+1) == '*'))
+                    {
+                        commInProg = true;
+                        i++;
+                    }
+                    else
+                        temp.append(s.charAt(i));
+                }
+            }
+            if(temp.length() > 0 && !commInProg)
+            {
+                result.add(temp.toString());
+                temp = new StringBuilder();
+            }
+        }
+        return result;
+    }
+}
