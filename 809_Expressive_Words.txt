@@ -1,0 +1,51 @@
+class Solution {
+    public int expressiveWords(String S, String[] words) {
+        int len = S.length();
+        int result = 0;
+        int []freq1= getFrequencies(S, len);
+        for(String word: words)
+        {
+            if(word.length() > len)
+                continue;
+            int x=0;
+            int []freq2= getFrequencies(word, len);
+            while(x<len)
+            {
+                int z1=0, z2=0;
+                if(freq1[x] < freq2[x])
+                    break;
+                if(freq1[x]<3)
+                {
+                    if(freq1[x] != freq2[x])
+                        break;
+                }
+                else
+                {
+                    if(freq2[x] == 0)
+                        break;
+                }
+                if(freq1[x]!= 0 && freq2[x]!= 0 && S.charAt(z1) != word.charAt(z2))
+                    break;
+                z1 += freq1[x]-1;
+                z2 += freq2[x]-1;
+                x++;
+            }
+            if(x == len)
+                result++;
+        }
+        return result;
+    }
+    private int[] getFrequencies(String s, int len)
+    {
+        int []freq = new int[len];
+        int c1 = 0, c2 = 0, index = 0;
+        while(c2<s.length())
+        {
+            while(c2<s.length() && s.charAt(c1) == s.charAt(c2))
+                c2++;
+            freq[index++] = c2-c1;
+            c1=c2;
+        }
+        return freq;
+    }
+}
