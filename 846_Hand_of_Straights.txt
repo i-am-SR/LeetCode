@@ -1,0 +1,26 @@
+class Solution {
+    public boolean isNStraightHand(int[] hand, int W) {
+        if(hand.length % W != 0)
+            return false;
+        Map<Integer, Integer> map = new TreeMap<>(); // TreeMap is used as keys will be sorted
+        for(int card: hand)
+        {
+            map.put(card, map.getOrDefault(card, 0) + 1);
+        }
+        for(int x: map.keySet()) // cards in sorted order
+        {
+            //System.out.print(x + ",");
+            if(map.get(x) > 0)
+            {
+                for(int i = 1;i < W;i++)
+                {
+                    if(map.getOrDefault(x + i, 0) < map.get(x)) //The freq of the card in the W pair should be atleast freq of x
+                        return false;
+                    map.put(x + i, map.get(x + i) - map.get(x));
+                }
+                //map.put(x, 0);
+            }
+        }
+        return true;
+    }
+}

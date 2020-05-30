@@ -5,27 +5,19 @@ class Solution {
         int start=0,end=0,i,minLen=Integer.MAX_VALUE,sum=nums[0];
         while(end<nums.length)
         {
-            if(sum<s)
-            {
-                end++;
-                if(end!=nums.length)
-                    sum+=nums[end];
-            }
-            else
+            if(sum>=s)
             {
                 minLen=Math.min(minLen, end-start+1);
                 if(start<end)
                 {
                     sum-=nums[start];
                     start++;
-                }
-                else
-                {
-                    end++;
-                    if(end!=nums.length)
-                        sum+=nums[end];
+                    continue;
                 }
             }
+            end++;
+            if(end!=nums.length)
+                sum+=nums[end];
         }
         return (minLen==Integer.MAX_VALUE)?0:minLen;
     }

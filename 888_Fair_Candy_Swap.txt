@@ -1,0 +1,35 @@
+class Solution {
+    public int[] fairCandySwap(int[] A, int[] B) {
+        Set<Integer> set= new HashSet<>();
+        int swap = 0; // flag to check if A nad B were swapped. I am doing this to make sure that we iterate over the smaller array in the last for loop
+        if(B.length > A.length)
+        {
+            swap = 1;
+            int []temp = A;
+            A= B;
+            B= temp;
+        }
+        int sumA=0, sumB=0;
+        int []result = new int[2];
+        for(int a:A)
+        {
+            sumA+=a;
+            set.add(a);
+        }
+        for(int b:B)
+        {
+            sumB+=b;
+        }
+        int diff = (int)(sumB-sumA)/2;
+        for(int b:B)
+        {
+            if(set.contains(b-diff))
+            {
+                result[(0 + swap) % 2] = b-diff;
+                result[(1 + swap) % 2] = b;
+                break;
+            }
+        }
+        return result;
+    }
+}
