@@ -1,0 +1,21 @@
+class Solution {
+    public int lastStoneWeight(int[] stones) {
+        Queue<Integer> pq = new PriorityQueue<>((a,b) -> (b-a));
+        for(int stone: stones)
+        {
+            pq.offer(stone);
+        }
+        while(!pq.isEmpty())
+        {
+            int a = pq.remove();
+            if(pq.isEmpty())
+                return a;
+            int b = pq.remove();
+            if(a != b)
+            {
+                pq.offer(Math.abs(a-b));
+            }    
+        }
+        return 0;
+    }
+}
