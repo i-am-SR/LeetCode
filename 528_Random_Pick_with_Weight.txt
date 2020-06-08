@@ -1,0 +1,26 @@
+class Solution {
+    private int []wArr;
+    private int last = 0;
+    private Random rand = new Random();
+    public Solution(int[] w) {
+        wArr= new int[w.length];
+        wArr[0] = w[0];
+        for(int i=1; i<w.length; i++)
+        {
+            wArr[i] = w[i] + wArr[i-1];
+        }
+        last = wArr[w.length - 1];
+    }
+    
+    public int pickIndex() {
+        int num = rand.nextInt(last) + 1; //rand.nextInt(last) - Returns a pseudo random, uniformly distributed int value between [0,last). Se we add + 1 to get the values between [1, last]
+        int index = Arrays.binarySearch(wArr, num); //returns index of the search key, if it is contained in the array; otherwise, (-(insertion point) – 1)
+        return index >= 0 ? index : -index - 1;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(w);
+ * int param_1 = obj.pickIndex();
+ */
