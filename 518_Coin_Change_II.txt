@@ -1,0 +1,12 @@
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[] combinations = new int[amount+1];
+        combinations[0] = 1;
+        for(int coin : coins)
+        {
+            for(int i = coin; i< amount+1; i++)
+                combinations[i] += combinations[i - coin]; //for a particular coin out of coins, the number of combinations for the amount (i) will be the same as the number of combinations for amount (i - coin) (so we add this value) because we can add the coin to the the amount (i-coin) to get the amount (i)
+        }
+        return combinations[amount];
+    }
+}
