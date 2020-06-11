@@ -1,0 +1,25 @@
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int len = matrix.length;
+        if(len == 0)
+            return 0;
+        int wid = matrix[0].length;
+        if(wid == 0)
+            return 0;
+        int maxArea = 0;
+        int [][] maxSq = new int[len+1][wid+1];
+        int i, j;
+        for(i = len -1; i>=0; i--)
+        {
+            for(j = wid -1; j>=0; j--)
+            {
+                if(matrix[i][j] == '1')
+                {
+                    maxSq[i][j] = Math.min(Math.min(maxSq[i+1][j], maxSq[i][j+1]), maxSq[i+1][j+1]) + 1;
+                    maxArea = Math.max(maxArea, maxSq[i][j] * maxSq[i][j]);
+                }
+            }
+        }
+        return maxArea;
+    }
+}
