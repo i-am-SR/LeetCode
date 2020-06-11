@@ -1,0 +1,16 @@
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>(); // map with key as [current_sub_array_sum (from index 0 to i) - k] to the number of subarrays that posses this sum.
+        int i,result = 0;
+        int subSum = 0;
+        map.put(0, 1);
+        for(i = 0; i < nums.length; i++)
+        {
+            subSum += nums[i];
+            if(map.containsKey(subSum - k))
+                result += map.get(subSum - k);
+            map.put(subSum, map.getOrDefault(subSum, 0) + 1);
+        }
+        return result;
+    }
+}
