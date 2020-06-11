@@ -1,0 +1,31 @@
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        /*int i,j,match=-1;
+        for(i=0;i<s.length();i++)
+        {
+            char c1=s.charAt(i);
+            for(j=match+1;j<t.length();j++)
+            {
+                char c2=t.charAt(j);
+                if(c1==c2)
+                {
+                    match=j;
+                    break;
+                }
+            }
+            if(j==t.length())
+                return false;
+        }
+        return true;*/
+        int last=0,i=0;
+        while(i<s.length())
+        {
+            int next=t.substring(last).indexOf(s.charAt(i));
+            if(next==-1)
+                return false;
+            last+=next+1;
+            i++;
+        }
+        return true;
+    }
+}
