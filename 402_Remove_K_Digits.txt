@@ -1,0 +1,29 @@
+class Solution {
+    public String removeKdigits(String s, int k) {
+        if(k == s.length())
+            return "0";
+        Stack<Character> stk = new Stack<>();
+        stk.push(s.charAt(0));
+        for(int i = 1; i< s.length(); i++)
+        {
+            while(!stk.isEmpty() && s.charAt(i) < stk.peek() && k > 0) // checking for peaks in the String
+            {
+                char c = stk.pop();
+                k--;
+            }
+            stk.push(s.charAt(i));   
+        }
+        while( k> 0)
+        {
+            char c = stk.pop();
+            k--;
+        }
+        StringBuilder sb = new StringBuilder();
+        while(!stk.isEmpty())
+            sb.insert(0, stk.pop());
+        int i = 0;
+        while(i < sb.length()-1 && sb.charAt(i) == '0') // checking for leading zeros
+            i++;
+        return sb.substring(i);
+    }
+}
