@@ -1,0 +1,30 @@
+class SnapshotArray {
+    private Map<Integer, Integer> []array; 
+    private int snapID = 0;
+    public SnapshotArray(int length) {
+        array = new HashMap[length];
+        for(int i =0 ;i<length ; i++)
+        {
+            array[i] = new HashMap<>();
+            array[i].put(0,0);
+        }
+    }
+    
+    public void set(int index, int val) {
+        array[index].put(snapID, val);
+    }
+    
+    public int snap() {
+        return snapID++;
+    }
+    
+    public int get(int index, int snap_id) {
+        int i = snap_id;
+        while(i >= 0) // because we can call snap many times without calling set90 we need to return the last available value.
+        {
+            if(array[index].containsKey(i--))
+                return array[index].get(i+1);
+        }
+        return 0;
+    }
+}
