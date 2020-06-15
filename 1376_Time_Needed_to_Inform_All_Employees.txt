@@ -1,32 +1,24 @@
 class Solution {
     public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
-        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
-        int len = manager.length, result = 0;
-        for(int i =0; i < len; i++)
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        int result = 0;
+        for(int i =0; i < n; i++)
         {
             if(i != headID)           
             {
-                graph.putIfAbsent(manager[i], new HashMap<>());
-                graph.get(manager[i]).put(i, informTime[manager[i]]);
+                graph.putIfAbsent(manager[i], new ArrayList<>());
+                graph.get(manager[i]).add(i);
             }
         }
-        Stack<int[]> stack = new Stack<>();
-        stack.push(new int[]{headID, informTime[headID]});
-        while(!stack.isEmpty())
-        {
-            int []temp = stack.pop();
-            int employee = temp[0], time = temp[1];
-            //System.out.println("Curr node = " + employee + " and curr time = " + time);
-            if(!graph.containsKey(employee))
-                result = Math.max(result, time);
-            else
-            {
-                for(int j : graph.get(employee).keySet())
-                {
-                    stack.push(new int[]{j, time + informTime[j]});
-                }
-            }
-        }
-        return result;        
+        return dfs(headID, informTime[headID], informTime, graph);
+    }
+    private int dfs(int i, int currTime, int[] informTime, Map<Integer, List<Integer>> graph)
+    {
+        int temp = 0;
+        if(!graph.containsKey(i))
+            return currTime;
+        for(int j: graph.get(i))
+            temp = Math.max(temp, dfs(j, currTime + informTime[j], informTime, graph));
+        return temp; 
     }
 }
