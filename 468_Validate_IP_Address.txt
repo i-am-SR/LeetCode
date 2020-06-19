@@ -1,0 +1,65 @@
+class Solution {
+    public String validIPAddress(String IP) {
+        int indexDot = IP.indexOf("."), indexColon = IP.indexOf(":"), count = 0;
+        String none = "Neither";
+        if((indexDot != -1 && indexColon != -1) || (indexDot == -1 && indexColon == -1))
+            return none;
+        if(indexDot != -1)
+            return validIPv4(IP);
+        else
+            return validIPv6(IP);
+    }
+    private String validIPv4(String IP)
+    {
+        String []arrIP = IP.split("\\.", -1);
+        if(arrIP.length != 4)
+            return "Neither";
+        for(String s: arrIP)
+        {
+            if(s.length() == 0 || s.length() > 3)
+                return "Neither";
+            if(s.length() > 1 && s.startsWith("0"))
+                return "Neither";
+            for(char c: s.toCharArray())
+                if(!Character.isDigit(c))
+                    return "Neither";
+            if(Integer.parseInt(s) < 0 || Integer.parseInt(s) > 255)
+                return "Neither";
+        }
+        return "IPv4";
+    }
+    private String validIPv6(String IP)
+    {
+        String []arrIP = IP.split("\\:", -1);
+        //System.out.println(arrIP.length);
+        if(arrIP.length != 8)
+        {
+            //System.out.println("More components than expected");
+            return "Neither";
+        }
+        for(String s: arrIP)
+        {
+            if(s.length() == 0 || s.length() > 4)
+            {
+                //System.out.println("Big substring");
+                return "Neither";
+            }
+            s = s.toLowerCase();
+            for(char c: s.toCharArray())
+                if(Character.isDigit(c) || Character.isLetter(c))
+                {
+                    if(!Character.isDigit(c) && ((c - 'a') < 0 || (c - 'a') > 5))
+                    {
+                        //System.out.println("Not Hexadecimal");
+                        return "Neither";  
+                    }
+                }
+                else
+                {
+                    //System.out.println("Not a hexadecimal");
+                    return "Neither";
+                }
+        }
+        return "IPv6";
+    }
+}
