@@ -1,0 +1,28 @@
+class Solution {
+    public int islandPerimeter(int[][] grid) {
+        int len=grid.length;
+        if(len==0) return 0;
+        int wid=grid[0].length;
+        if(wid==0) return 0;
+        int perim=0;
+        int i,j;
+        for(i=0;i<len;i++)
+        {
+            for(j=0;j<wid;j++)
+            {
+                if(grid[i][j]==1)
+                {
+                    if(i==0 || (i>0 && grid[i-1][j]==0))
+                        perim++;
+                    if(j==0 || (j>0 && grid[i][j-1]==0))
+                        perim++;
+                    if(i==len-1 || (i<len-1 && grid[i+1][j]==0))
+                        perim++;
+                    if(j==wid-1 || (j<wid-1 && grid[i][j+1]==0))
+                        perim++;
+                }
+            }
+        }
+        return perim;
+    }
+}
