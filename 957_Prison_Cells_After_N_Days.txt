@@ -1,0 +1,30 @@
+class Solution {
+    public int[] prisonAfterNDays(int[] cells, int N) {
+        /*
+        Given that cells.length = 8, and eventually cells[0] and cells[7] will become 0.
+        thus, we have 2 ^ 6 = 64 different states.
+        Make use of the fact that there will be a loop, as iterating gives TLE.
+        */
+        int len = cells.length;
+        Map<String, Integer> map = new HashMap();
+        while(N > 0)
+        {
+            int []cell_copy = new int[len];
+            map.put(Arrays.toString(cells), N);
+            for(int j = 1; j< len - 1; j++)
+            {
+                if(cells[j - 1] == cells[j + 1])
+                    cell_copy[j] = 1;
+                else
+                    cell_copy[j] = 0;
+            }
+            cells = cell_copy;
+            N--;
+            if(map.containsKey(Arrays.toString(cells)))
+            {
+                N %= map.get(Arrays.toString(cells)) - N; //Move past all the states in the loop
+            }
+        }
+        return cells;
+    }
+}
