@@ -1,0 +1,22 @@
+class Solution {
+    public int trap(int[] height) {
+        int lo = 0, hi = height.length -1, leftMax = 0, rightMax = 0, result = 0;
+        while(lo < hi){
+            leftMax = Math.max(leftMax, height[lo]);
+            rightMax = Math.max(rightMax, height[hi]);
+            /*
+            if the max height observed from the left side is less than the max height observed from the right side,
+            all the tiles from occurence of leftMax to RightMax will contain leftMax - height[lo] water and vice-versa
+            */
+            if(leftMax < rightMax){
+                result += leftMax - height[lo];
+                lo++;
+            }
+            else{
+                result += rightMax - height[hi];
+                hi--;
+            }
+        }
+        return result;
+    }
+}
