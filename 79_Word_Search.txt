@@ -1,49 +1,27 @@
 class Solution {
     private int len, wid;
-    private boolean result = false;
     public boolean exist(char[][] board, String word) {
         len = board.length;
         wid = board[0].length;
-        Set<String> visited = new HashSet<>();
+        boolean[][] visited = new boolean[len][wid];
         for(int i =0; i<len;i++){
             for(int j =0; j<wid;j++){
-                //visited = new HashSet<>();
-                bfs(board, word, 0, i, j, visited);
+                if(search(board, word, 0, i, j, visited))
+                    return true;
             }
         }
-        return result;
+        return false;
     }
-    private void bfs(char[][] board, String word, int currIndex, int i, int j, Set<String> visited){
-        int[] curr = new int[]{i,j};
-        if(board[i][j] == word.charAt(currIndex) && !result){
-            visited.add(Arrays.toString(curr));
-            if(word.length() == currIndex+1){
-                result = true;
-                return;
-            }
-            else{
-                if(i + 1 < len){
-                    int []next = new int[]{i+1,j};
-                    if(!visited.contains(Arrays.toString(next)))
-                        bfs(board, word, currIndex+1, i+1, j, visited);
-                }
-                if(i - 1 >= 0){
-                    int []next = new int[]{i-1,j};
-                    if(!visited.contains(Arrays.toString(next)))
-                        bfs(board, word, currIndex+1, i-1, j, visited);
-                }
-                if(j - 1 >= 0){
-                    int []next = new int[]{i,j-1};
-                    if(!visited.contains(Arrays.toString(next)))
-                        bfs(board, word, currIndex+1, i, j-1, visited);
-                }
-                if(j + 1 < wid){
-                    int []next = new int[]{i,j+1};
-                    if(!visited.contains(Arrays.toString(next)))
-                        bfs(board, word, currIndex+1, i, j+1, visited);
-                }
-            }
-            visited.remove(Arrays.toString(curr));
-        }
+    private boolean search(char[][] board, String word, int currIndex, int i, int j, boolean[][] visited){
+        if(currIndex == word.length())
+            return true;
+        if(i < 0 || j < 0 || i >= len || j >= wid || visited[i][j])
+            return false;
+        if(board[i][j] != word.charAt(currIndex))
+            return false;
+        visited[i][j] = true;
+        boolean result = search(board, word, currIndex+1, i+1, j, visited) || search(board, word, currIndex+1, i-1, j, visited) || search(board, word, currIndex+1, i, j-1, visited) || search(board, word, currIndex+1, i, j+1, visited);
+        visited[i][j] = false;
+        return result;
     }
 }
