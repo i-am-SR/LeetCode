@@ -1,0 +1,20 @@
+class Solution {
+    public int numDecodings(String s) {
+        int len = s.length();
+        if(len == 0 || s.charAt(0) == '0') // If the first character of the string is 0 then it is invalid
+            return 0;
+        int[] dp = new int[len + 1];
+        dp[0] = 1; //null string can be decoded in 1 way
+        dp[1] = 1; //the first character can only be decoded in one way (the case of first char being 0 is already handled) 
+        for(int i = 2;i <= len; i++){
+            if(s.charAt(i-1) != '0'){ // if the 2nd char is 0, the last 2 chars can only be considered as 1 letter so same number of decodings as dp[i-1]
+                dp[i] += dp[i - 1];
+            }
+            int temp= Integer.valueOf(s.substring(i-2, i));
+            if(temp < 27 && temp > 9){ // if the last 2 chars form a valid 2 digit encoding then we add the number of decodings as dp[i-2]
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[len];
+    }    
+}
