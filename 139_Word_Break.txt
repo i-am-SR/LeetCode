@@ -1,0 +1,23 @@
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        Map<Character, List<String>> map = new HashMap();
+        for(String word: wordDict){
+                char c = word.charAt(0);
+                map.putIfAbsent(c, new LinkedList<String>());
+                map.get(c).add(word);
+        }
+        for(int i = 0; i < s.length(); i++){
+            if(dp[i] && map.containsKey(s.charAt(i))){
+                String curr = s.substring(i);
+                for(String str : map.get(s.charAt(i))){
+                    if(curr.startsWith(str)){
+                        dp[i + str.length()] = true;
+                    }
+                }
+            }
+        }
+        return dp[s.length()];        
+    }
+}
