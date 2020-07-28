@@ -1,41 +1,47 @@
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        int level = 0;
-        Queue<String> q = new LinkedList<>();
-        if(beginWord.length() != 0){
-            q.offer(beginWord);
-            level++;
-        }
-        else
-            return 0;
+        //Dekha - Bi-directional BFS
+        int level = 1;
+        Set<String> fwdSet = new HashSet<>();
+        Set<String> bckSet = new HashSet<>();
         Set<String> wordListSet = new HashSet<>();
         for(String x: wordList)
             wordListSet.add(x);
+        if(beginWord.length() != 0){
+            fwdSet.add(beginWord);
+        }
+        else
+            return 0;
         if(!wordListSet.contains(endWord))
             return 0;
-        while(!q.isEmpty())
+        else
+            bckSet.add(endWord);
+        while(!bckSet.isEmpty() && !fwdSet.isEmpty())
         {
-            int size = q.size();
-            while(size>0)
-            {
-                size--;
-                String curr = q.poll();
-                if(curr.equals(endWord)){
-                    return level;
-                }
-                for(int i = 0; i < curr.length(); i++){
-                    char[] tempArr = curr.toCharArray();
-                    for(char c = 'a'; c <= 'z' ; c++){
-                        tempArr[i] = c;
-                        String temp = new String(tempArr);
-                        if(wordListSet.contains(temp)){
-                            q.offer(temp);
-                            wordListSet.remove(temp); // remove from the wordList to avoid visiting it again.
-                        }
+            if(bckSet.size() < fwdSet.size()){
+                Set<String> temp = bckSet;
+                bckSet = fwdSet;
+                fwdSet = temp;
+            }
+            Set<String> tempSet = new HashSet();
+            for(String s: fwdSet){
+                char[] tmpArr;
+                for(int i = 0; i < s.length(); i++){
+                    tmpArr = s.toCharArray();
+                    for(char c = 'a'; c <= 'z'; c++){
+                        tmpArr[i] = c;
+                        String tmp = new String(tmpArr);
+                        if(bckSet.contains(tmp))
+                            return level + 1;
+                        if(wordListSet.contains(tmp)){
+                            tempSet.add(tmp);
+                            wordListSet.remove(tmp); // remove from the wordList to avoid visiting it again.
+                        }   
                     }
                 }
             }
             level++;
+            fwdSet = tempSet;
         }
         return 0;
     }
