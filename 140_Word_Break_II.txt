@@ -1,0 +1,34 @@
+class Solution {
+    // DFS with memoization
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> wordDictSet = new HashSet();
+        for(String word: wordDict){
+            wordDictSet.add(word);        
+        }
+        return helper(s, new HashMap<String, List<String>>(), wordDictSet);
+    }
+    private List<String> helper(String str, Map<String, List<String>> map, Set<String> wordDictSet){
+        if(map.containsKey(str))
+            return map.get(str);
+        List<String> l = new LinkedList<>();
+        if(str.length() == 0){
+            l.add("");
+            return l;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(String word: wordDictSet){
+            if(str.startsWith(word)){
+                for(String next : helper(str.substring(word.length()), map, wordDictSet)){
+                    sb = new StringBuilder();
+                    sb.append(word);
+                    if(next.length() > 0)
+                        sb.append(" ");
+                    sb.append(next);
+                    l.add(sb.toString());
+                }
+            }
+        }
+        map.put(str, l);
+        return l;
+    }
+}
