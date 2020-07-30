@@ -1,0 +1,15 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int len = prices.length;
+        if(len == 0)
+            return 0;
+        int []buy = new int[len + 1]; // Most profit earned till day i-1 with last transaction being a buy
+        int []sell = new int[len + 1]; // Most profit earned till day i-1 with last transaction being a sell
+        buy[1] = -prices[0]; // Buying on day 0 (i.e. i-1 where i is 1) will lead us to a profit of -prices[0]
+        for(int i = 2; i<= len; i++){
+            buy[i] = Math.max(buy[i-1], sell[i-2] - prices[i-1]); // we either do nothing on day i-1 or buy on that day
+            sell[i] = Math.max(sell[i - 1], buy[i - 1] + prices[i-1]); // we either do nothing on day i-1 or sell on that day
+        }
+        return sell[len]; // return the Most profit earned till day len-1 with last transaction being a sell
+    }
+}
