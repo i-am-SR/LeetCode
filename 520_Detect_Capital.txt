@@ -1,0 +1,18 @@
+class Solution {
+    public boolean detectCapitalUse(String word) {
+        int len = word.length();
+        boolean firstCap = Character.isUpperCase(word.charAt(0));
+        int capCount = 0;
+        if(firstCap)
+            capCount++;
+        for(int i = 1; i< len; i++){
+            if(Character.isUpperCase(word.charAt(i))){
+                if(!firstCap){
+                    return false;
+                }
+                capCount++;
+            }
+        }
+        return firstCap ? capCount == 1 || capCount == len : capCount == 0;
+    }
+}
