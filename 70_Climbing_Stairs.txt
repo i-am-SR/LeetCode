@@ -1,0 +1,12 @@
+class Solution {
+    public int climbStairs(int n) {
+        //dynamic programming
+        int first = 1, second = 2, third = second; // incase n == 2
+        for(int i = 2; i < n; i++){
+            third = first + second;
+            first = second;
+            second = third;
+        }
+        return n == 1 ? 1 : third;
+    }
+}
