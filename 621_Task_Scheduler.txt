@@ -1,0 +1,48 @@
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        int []freq = new int[26];
+        int maxFreq = 0, maxCount = 0;
+        /*
+        maxFreq is the freq of the most occuring element and maxCount is the number of elements with maxFreq
+        */
+        for(char task: tasks){
+            freq[task - 'A']++;
+            if(freq[task - 'A'] == maxFreq){
+                maxCount++; 
+            }
+            if(freq[task - 'A'] > maxFreq){
+                maxCount = 1;
+                maxFreq = freq[task - 'A'];
+            }           
+        }
+        int numIntervals = maxFreq - 1;
+        /*
+        numIntervals is the number of intervals created after placing the maxElement at a distance of n
+        e.g. maxElement = 'A', maxFreq = 3, and n = 3
+        A * * * A * * * A
+        maxFreq - 1 i.e. 2 intervals are formed 
+        */
+        int numVacancies = numIntervals * (n - maxCount + 1);
+        /*
+        numVacancies is the number of spots remaining after placing the other tasks with freq same as 
+        maxFreq in the createed intervals
+        e.g. maxElement = 'A' & 'B', maxFreq = 3, and n = 3
+        A B * * A B * * A B
+        numVacancies = 4 
+        */
+        int numCandidates = tasks.length - maxFreq * maxCount;
+        /*
+        numCandidates is the number of tasks remaining after placing the tasks with maxFreq 
+        e.g. tasks = ['A', 'A', 'A', 'B', 'B', 'B', 'C'], maxCount = 2, maxFreq = 3, and n = 3
+        numCandidates = 1
+        */
+        int numIdles = Math.max(0, numVacancies - numCandidates);
+        /*
+        numIdles is the number of spots that will remain idle after placing all the spots 
+        e.g. tasks = ['A', 'A', 'A', 'B', 'B', 'B', 'C'], maxCount = 2, maxFreq = 3, and n = 3
+        A B C * A B * * A B
+        numIdles = 3
+        */
+        return tasks.length + numIdles; 
+    }
+}
