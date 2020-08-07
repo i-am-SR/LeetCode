@@ -1,0 +1,55 @@
+class MyHashSet {
+    private List<Integer>[] set;
+    private int maxCapacity = 1000;
+    private int currCapacity = 0;
+    private float loadfactor = 0.75f; 
+    /** Initialize your data structure here. */
+    public MyHashSet() {
+        this.set = new LinkedList[this.maxCapacity];
+    }
+    
+    public void add(int key) {
+        if(this.contains(key))
+            return;
+        if(this.currCapacity >= this.loadfactor * this.maxCapacity){ // rehashing
+            this.currCapacity = 0;
+            this.maxCapacity *= 2;
+            List<Integer>[] origSet = set;
+            this.set = new LinkedList[this.maxCapacity];
+            for(List<Integer> l : origSet){
+                if(l != null){
+                    for(Integer i: l){
+                        add(i);
+                    }
+                }   
+            }
+        }
+        int bucketNum = key % this.maxCapacity;
+        if(this.set[bucketNum] == null)
+            this.set[bucketNum] = new LinkedList<Integer>();
+        this.set[bucketNum].add(key);
+        this.currCapacity++;
+    }
+    
+    public void remove(int key) {
+        int bucketNum = key % this.maxCapacity;
+        if(this.contains(key)){
+            this.set[bucketNum].remove(new Integer(key));
+            this.currCapacity--;
+        }
+    }
+    
+    /** Returns true if this set contains the specified element */
+    public boolean contains(int key) {
+        int bucketNum = key % this.maxCapacity;
+        return this.set[bucketNum] == null ? false : this.set[bucketNum].contains(key);
+    }
+}
+
+/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * MyHashSet obj = new MyHashSet();
+ * obj.add(key);
+ * obj.remove(key);
+ * boolean param_3 = obj.contains(key);
+ */

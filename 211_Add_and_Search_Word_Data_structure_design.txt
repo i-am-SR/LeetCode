@@ -1,0 +1,55 @@
+class WordDictionary {
+    class TrieNode{
+        private TrieNode[] child;
+        private boolean end;
+        public TrieNode(){
+            child = new TrieNode[26];
+            end = false;
+        }
+    }
+    
+    TrieNode root;
+    /** Initialize your data structure here. */
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    /** Adds a word into the data structure. */
+    public void addWord(String word) {
+        TrieNode curr = root;
+        for(char c: word.toCharArray()){
+            if(curr.child[c - 'a'] == null){
+                curr.child[c - 'a'] = new TrieNode();
+            }
+            curr = curr.child[c - 'a'];
+        }
+        curr.end = true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+        return helper(word, root, 0);
+    }
+    private boolean helper(String word, TrieNode curr, int index){
+        if(index == word.length())
+            return curr.end;
+        if(word.charAt(index) == '.'){
+            for(TrieNode tn: curr.child){
+                if(tn != null && helper(word, tn, index + 1))
+                    return true;
+            }
+        }
+        else{
+            if(curr.child[word.charAt(index) - 'a'] != null && helper(word, curr.child[word.charAt(index) - 'a'], index + 1))
+                return true;
+        }
+        return false;
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */

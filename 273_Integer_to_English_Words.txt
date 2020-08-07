@@ -1,0 +1,40 @@
+class Solution {
+    private final String[] ones = new String[]{"", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine"};
+    private final String[] tens = new String[]{"", " Ten", " Twenty", " Thirty", " Forty", " Fifty", " Sixty", " Seventy", " Eighty", " Ninety"};
+    private final String[] teens = new String[]{"", " Eleven", " Twelve", " Thirteen", " Fourteen", " Fifteen", " Sixteen", " Seventeen", " Eighteen", " Nineteen"};
+    private final String[] th = new String[]{"", " Thousand", " Million", " Billion"};
+    public String numberToWords(int num) {
+        if(num == 0)
+            return "Zero";
+        StringBuilder result = new StringBuilder();
+        int count = 0;
+        while(num > 0){
+            StringBuilder temp = new StringBuilder();
+            for(int i = 0; i < 3; i++){
+                if(num > 0){
+                    if(i == 0 && (num % 100) > 10 && (num % 100) < 20){
+                        temp.insert(0, teens[(num % 100) - 10]);
+                        num /= 100;
+                        i++;
+                        continue;
+                    }
+                        if(i == 1){
+                            temp.insert(0, tens[(num % 10)]);
+                        }
+                        else{
+                            if(i == 2 && (num % 10) > 0){
+                                temp.insert(0, " Hundred");
+                            }
+                            temp.insert(0, ones[(num % 10)]);
+                        }
+                        num /= 10;
+                    }
+            }
+            if(temp.length() > 0)
+                temp.append(th[count]);
+            count++;
+            result.insert(0, temp);
+        }
+        return result.toString().trim();
+    }
+}

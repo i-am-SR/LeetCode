@@ -1,0 +1,14 @@
+class Solution {
+    public boolean isPowerOfFour(int num) {
+        // A negative number cant be power of 4
+        if(num < 1)
+            return false;
+        // A power of 4 will have just onr bit set to 1 and the rest as 0
+        if((num & num-1) != 0)
+            return false;
+        // All powers of 4 have their preceding number divisible by 3
+        if((num - 1) % 3 > 0)
+            return false;
+        return true;
+    }
+}
