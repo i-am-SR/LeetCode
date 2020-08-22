@@ -1,0 +1,81 @@
+class Solution {
+    // length and width of the grid
+    private int len, wid;
+    // replica of the grid array
+    private char[][] grid;
+    public boolean containsCycle(char[][] grid_t) {
+        len = grid_t.length;
+        // There cant be any cycles if the length is less than 2
+        if(len < 2)
+            return false;
+        wid = grid_t[0].length;
+        // There cant be any cycles if the width is less than 2
+        if(wid < 2)
+            return false;
+        grid = new char[len][wid];
+        // copy the grid array
+        for(int i = 0; i<len; i++){
+            for(int j = 0; j< wid; j++){
+                grid[i][j] = grid_t[i][j];
+            }
+        }
+        // iterate over every element in teh array
+        for(int i = 0; i<len; i++){
+            for(int j = 0; j< wid; j++){
+                // if the element does not lie in the range ('a'-'z'), then it has already been visited => Ignore
+                if(grid[i][j] - 'a' >= 0 && grid[i][j] - 'a' < 26){
+                    char curr = grid[i][j];
+                    if(helper(i, j, curr, 0, 0))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    /*
+    Function to perform dfs. Arguments:
+    i : the current x index in grid
+    j : the current y index in grid
+    curr : the character whose cycle we are searching for
+    lastx: the x displacement in the last step, if any. +1 -> moved right, -1 -> moved left, 0 -> none
+    lasty: the y displacement in the last step, if any. +1 -> moved down, -1 -> moved up, 0 -> none
+    ##we make sure that our current step does not counter [do the opposite of] what we did in the last step otherwise we dont have a valid cycle
+    */
+    private boolean helper(int i, int j, char curr, int lastx, int lasty){
+        // If we come back to a visited cell with the same character whose cycle we are searching for, return true
+        if(grid[i][j] == curr + 27)
+            return true;
+        // If we are at a cell that does not have the character whose cycle we are searching for, return false and stop searching this branch
+        if(grid[i][j] != curr)
+            return false;
+        /*
+        Now having made sure that the cell has the character whose cycle we are searching for, mark it as visited by adding 27 to it.
+        I have used 27 as it sets the value of the cell out of the range ('a'-'z') and makes this value unique for each curr character whose cycle we are searching for.
+        This helps with the first if loop in this function as we know that this cell was already visited and contained the character whose cycle we are searching for.
+        */
+        grid[i][j] += 27;
+        boolean result = false;
+        /*
+        In order to make sure that we dont move to the cell that we visited in our last move, we check if the last move was not the opposite of the current move that we want to play
+        e.g. if we moved left in the last move, we dont want to move right in this move as it would be an invalid cycle. So, we can choose to continue left.
+        */
+        // if the last move was not to go left, we continue in the right direction i.e. i + 1
+        if(lastx != -1 && i < len-1){
+            result = result || helper(i+1, j, curr, 1, 0);
+        }
+        // if the last move was not to go right, we continue in the left direction i.e. i - 1
+        if(lastx != 1 && i > 0){
+            result = result || helper(i-1, j, curr, -1, 0);
+        }
+        // if the last move was not to go up, we continue in the down direction i.e. j + 1
+        if(lasty != -1 && j < wid-1){
+            result = result || helper(i, j+1, curr, 0, 1);
+        }
+        // if the last move was not to go down, we continue in the up direction i.e. j - 1
+        if(lasty != 1 && j > 0){
+            result = result || helper(i, j-1, curr, 0, -1);
+        }
+        // if any of these directions ultimately leads us to an already visisted cell with the same character, we have found our cycle
+        return result;        
+    }
+}
