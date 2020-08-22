@@ -1,0 +1,29 @@
+class Solution {
+    public String thousandSeparator(int n) {
+        if(n == 0)
+            return "0";
+        // flag to keep track of a negative integer
+        boolean neg = false;
+        if(n < 0){
+            neg = true;
+            // if number is negative, make it positive
+            n = -n;
+        }
+        StringBuilder sb =new StringBuilder();
+        while(n != 0){
+            // Add the first three digits from the right to the stringBuilder
+            for(int i=0; i< 3 && n != 0; i++){
+                sb.insert(0, n % 10);
+                n = n /10;
+            }
+            // if there are still digits remaining, add a dot
+            if(n != 0)
+                sb.insert(0, ".");
+        }
+        // if the number is negative, add a - sign
+        if(neg){
+            sb.insert(0, "-");
+        }
+        return sb.toString();
+    }
+}
