@@ -1,0 +1,17 @@
+class Solution {
+    public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
+        int[] inDegree= new int[n];
+        // Calculate the inDegree for each node i.e. the number of edges that end on that node
+        for(List<Integer> l: edges){
+            inDegree[l.get(1)]++;
+        }
+        List<Integer> res = new ArrayList<>();
+        // The solution is the set of all edges that have inDegree 0 because you can't reach these nodes from any other node
+        for(int i = 0; i < n; i++){
+            if(inDegree[i] == 0){
+                res.add(i);
+            }
+        }
+        return res;
+    }
+}
