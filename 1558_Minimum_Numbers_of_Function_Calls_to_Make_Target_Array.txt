@@ -1,0 +1,42 @@
+class Solution {
+    public int minOperations(int[] nums) {
+        int res = 0;
+        // if all values are zero no need to do anything
+        while(!allZeros(nums)){
+            // if all values are even, divide all by 2 in one move
+            if(allEven(nums)){
+                for(int i =0; i<nums.length; i++){
+                    nums[i] /= 2;
+                }
+                res++;
+            }
+            //else individually subtract 1 from all odd values to make them even 
+            else{
+                for(int i =0; i<nums.length; i++){
+                    if(nums[i] % 2 != 0){
+                        nums[i]--;
+                        res++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    // Function to check if all values are even
+    private boolean allEven(int[] nums){
+        for(int num: nums){
+            if(num % 2 != 0)
+                return false;
+        }
+        return true;
+    }
+    // Function to check if all the values are zeros
+    private boolean allZeros(int[] nums){
+        int count = 0;
+        for(int num: nums){
+            if(num == 0)
+                count++;
+        }
+        return count == nums.length;
+    }
+}
