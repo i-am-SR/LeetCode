@@ -1,6 +1,7 @@
 class Solution {
     public List<String> topKFrequent(String[] words, int k) {
-        Map<String, Integer> freqMap = new TreeMap<>();
+        // If we check the lexiographical order in the heap, we don't ned to use TreeMap
+        Map<String, Integer> freqMap = new HashMap<>();
         for(String word: words){
             freqMap.put(word, freqMap.getOrDefault(word, 0) + 1);
         }
