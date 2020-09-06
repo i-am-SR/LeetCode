@@ -1,0 +1,20 @@
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> freqMap = new TreeMap<>();
+        for(String word: words){
+            freqMap.put(word, freqMap.getOrDefault(word, 0) + 1);
+        }
+        // Important to define the priority properly
+        PriorityQueue<String> maxHeap = new PriorityQueue<>((a, b) -> (freqMap.get(b) == freqMap.get(a)) ? a.compareTo(b) : freqMap.get(b) - freqMap.get(a));
+        for(String word: freqMap.keySet()){
+            maxHeap.offer(word);
+        }
+        List<String> result = new ArrayList<>();
+        int count = 0;
+        while(count < k){
+            result.add(maxHeap.poll());
+            count++;
+        }
+        return result;
+    }
+}
