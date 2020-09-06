@@ -1,0 +1,53 @@
+class Solution {
+    //Dekha
+    public String nearestPalindromic(String n) {
+        int len = n.length();
+        boolean odd = (len % 2 == 0) ? false: true;
+        int mid = odd ? len / 2 : len / 2 - 1;
+        // Get the first half of the number
+        long leftHalf = Long.parseLong(n.substring(0, mid + 1));
+        long[] values = new long[5];
+        /*
+        lets take a number n = 12345
+        then left half = 123
+        There are 5 possible contenders for the nearest palindrome:
+        values[0] = createPalindrome(leftHalf, odd) => 12321
+        values[1] = createPalindrome(leftHalf - 1, odd) => 12221
+        values[2] = createPalindrome(leftHalf + 1, odd) => 12421
+        values[3] = (long)Math.pow(10, len - 1) - 1 => 9999
+        values[4] = (long)Math.pow(10, len) + 1 => 100001
+        */
+        values[0] = createPalindrome(leftHalf, odd);
+        values[1] = createPalindrome(leftHalf - 1, odd);
+        values[2] = createPalindrome(leftHalf + 1, odd);
+        values[3] = (long)Math.pow(10, len - 1) - 1;
+        values[4] = (long)Math.pow(10, len) + 1;
+        long origNum = Long.parseLong(n);
+        long result = 0, minDiff = Long.MAX_VALUE;
+        for(long val: values){
+            if(val != origNum){
+                if(Math.abs(val - origNum) < minDiff){
+                    minDiff = Math.abs(val - origNum);
+                    result = val;
+                }
+                // If the absolute difference is the same, choose the smaller number
+                else if(Math.abs(val - origNum) == minDiff){
+                    result = Math.min(result, val);
+                }
+            }
+        }
+        return Long.toString(result);
+    }
+    // function to create a palindrome given the first half of it
+    private long createPalindrome(long leftHalf, boolean odd){
+        long res = leftHalf;
+        if(odd){
+            leftHalf /= 10;
+        }
+        while(leftHalf > 0){
+            res = res * 10 + (leftHalf % 10);
+            leftHalf /= 10;
+        }
+        return res;
+    }
+}
