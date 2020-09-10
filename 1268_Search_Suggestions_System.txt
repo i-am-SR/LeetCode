@@ -1,0 +1,40 @@
+class Solution {
+    //Dekha
+    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        List<List<String>> result = new ArrayList<>();
+        Arrays.sort(products);
+        // Apparently List.subList method is faster than adding the individual entries. So we create a List
+        List<String> productsList = Arrays.asList(products);
+        // Make sure to define it as a TreeMap to use ceilingKey and floorKey functions
+        TreeMap<String, Integer> indexMap = new TreeMap<>();
+        for(int i = 0; i < products.length; i++){
+            indexMap.put(products[i], i);
+        }
+        StringBuilder curr = new StringBuilder();
+        for(char c: searchWord.toCharArray()){
+            curr.append(c);
+            /*
+            we find the word that is just bigger than or equal to curr and one that is smaller than curr
+            for upper bound we add '|' to curr because curr < curr + '|'
+            Instead of | we can use { } or ~ as they all have ASCII value more than 'z'
+            */
+            String lowerBound = indexMap.ceilingKey(curr.toString());
+            String upperBound = indexMap.floorKey(curr.toString() + '|');
+            // If there is no word bigger than curr or no word smaller than curr then there are no matching words. 
+            // break and add empty lists for the remaining characters
+            if(upperBound == null || lowerBound == null){
+                break;
+            }
+            List<String> temp = new ArrayList<>();
+            /*for(int i = indexMap.get(lowerBound); i < Math.min(indexMap.get(lowerBound) + 3, indexMap.get(upperBound) + 1); i++){
+                temp.add(products[i]);
+            }
+            result.add(temp);*/
+            result.add(productsList.subList(indexMap.get(lowerBound), Math.min(indexMap.get(lowerBound) + 3, indexMap.get(upperBound) + 1)));
+        }
+        while(searchWord.length() > result.size()){
+            result.add(new ArrayList<>());
+        }
+        return result;
+    }
+}
