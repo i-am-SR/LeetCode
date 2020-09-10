@@ -1,0 +1,39 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        Queue<int[]> bfs = new LinkedList<>();
+        int fresh = 0;
+        int len = grid.length, wid = grid[0].length;
+        for(int i = 0; i < len; i++){
+            for(int j = 0; j < wid; j++){
+                if(grid[i][j] == 1){
+                    fresh++;
+                }
+                else if(grid[i][j] == 2){
+                    bfs.add(new int[]{i, j});
+                }
+            }
+        }
+        if(fresh == 0)
+            return 0;
+        int[][] nextDir = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+        int result = 0, qsize = 0;
+        while(!bfs.isEmpty()){
+            result++;
+            qsize = bfs.size();
+            for(int i = 0; i < qsize; i++){
+                int[] curr = bfs.remove();
+                for(int[] next: nextDir){
+                    int x = curr[0] + next[0], y = curr[1] + next[1];
+                    if(x < 0 || x >= len || y < 0 || y >= wid || grid[x][y] == 0 || grid[x][y] == 2)
+                        continue;
+                    grid[x][y] = 2;
+                    bfs.add(new int[]{x, y});
+                    fresh--;
+                    if(fresh == 0)
+                        return result;
+                }
+            }    
+        }
+        return -1;
+    }
+}
