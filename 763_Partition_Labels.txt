@@ -1,0 +1,28 @@
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        List<Integer> result = new ArrayList<>();
+        int len = S.length();
+        // array to store the last index of occurence of each character
+        int[] lastOcc = new int[26];
+        for(int i = 0; i < len; i++){
+            lastOcc[S.charAt(i) - 'a'] = i;
+        }
+        /*
+        lastPart is the ending index of the last partition
+        maxLastOcuurence is the maximum index of last occurence of any of the characters in the current partition visted till now
+        */
+        int lastPart = -1, maxLastOccurence = -1;
+        for(int i = 0; i < len; i++){
+            maxLastOccurence = Math.max(maxLastOccurence, lastOcc[S.charAt(i) - 'a']);
+            /*
+            if the current index is the same as the max last occuence of any character in the current partition(maxLastOccurence) then we have found a new partition with size i - lastPart
+            */
+            if(i == maxLastOccurence){
+                result.add(i - lastPart);
+                lastPart = i;
+                maxLastOccurence = -1;
+            }
+        }
+        return result;
+    }
+}
