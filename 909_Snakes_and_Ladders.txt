@@ -1,0 +1,46 @@
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        // BFS approach
+        int n = board.length;
+        // size is n*n + 1 for simplicity as the snake and ladder values are 1-indexed and not 0-indexed.
+        int[] minMoves = new int[n*n + 1];
+        Arrays.fill(minMoves, Integer.MAX_VALUE);
+        minMoves[1] = 0;
+        Queue<Integer> q = new LinkedList<>();
+        q.add(1);
+        while(!q.isEmpty()){
+            int i = q.remove();
+            // If we have arrived at the destination return the value
+            if(i == n*n){
+                return minMoves[i];
+            }
+            for(int j = 1; j <= 6 && (i + j) <= n*n; j++){
+                // find the value in the board for cell i+j 
+                int jump = findVal(i + j, n, board);
+                // in case of a snake or ladder at cell i + j
+                if(jump != -1){
+                    if(minMoves[jump] > minMoves[i] + 1){
+                        q.add(jump);
+                        minMoves[jump] = minMoves[i] + 1;
+                    }
+                }
+                // in case of no snake or ladder at cell i + j
+                else{
+                    if(minMoves[i + j] > minMoves[i] + 1){
+                        q.add(i + j);
+                        minMoves[i + j] = minMoves[i] + 1;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    /*
+    This function returns the value of a cell i in the board given that it is written boustrophedonically
+    */
+    private int findVal(int i, int n, int[][] board){
+        int row = n - 1 - ((i - 1) / n);
+        int col = (n - 1 - row) % 2 == 0 ? (i - 1) % n : n - 1 - ((i - 1) % n);
+        return board[row][col];
+    }
+}
