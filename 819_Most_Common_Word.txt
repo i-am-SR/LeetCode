@@ -1,0 +1,25 @@
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        paragraph = paragraph.replaceAll("[^a-zA-Z]", " ").toLowerCase();
+        Set<String> set = new HashSet<>();
+        // add "" to banned words as incase of multiple whitespaces, we can have empty Strings in the words array
+        set.add("");
+        for(String s: banned){
+            set.add(s);
+        }
+        Map<String, Integer> freqMap = new HashMap<>();
+        String[] words = paragraph.split(" ");
+        String result = "";
+        int maxFreq = 0;
+        for(String word: words){
+            if(!set.contains(word)){
+                freqMap.put(word, freqMap.getOrDefault(word, 0) + 1);
+                if(freqMap.get(word) > maxFreq){
+                    maxFreq = freqMap.get(word);
+                    result = word;
+                }
+            }
+        }
+        return result;
+    }
+}
