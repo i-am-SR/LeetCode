@@ -10,14 +10,32 @@
  * }
  */
 public class Solution {
+    /*
+    The logic is to go with a two pointer approach: one pointer moves at twice the speed of the first. 
+    If there is a cycle the two pointers will meet at some node (Let's call this the meeting node).
+    If you start one pointer at head and one at the meeting node, both moving at the same speed, they
+    will meet at the staring node of the loop.
+    */
     public ListNode detectCycle(ListNode head) {
-        Set<ListNode> visited = new HashSet<>();
-        while(head!=null){
-            if(visited.contains(head))
-                return head;
-            visited.add(head);
-            head = head.next;
+        if(head == null)
+            return null;
+        boolean cycleFound = false;
+        ListNode n1= head, n2 = head;
+        while(n1 !=null && n2 != null && n2.next != null){
+            n1 = n1.next;
+            n2 = n2.next.next;
+            if(n1 == n2){
+                cycleFound = true;
+                break;
+            }
         }
-        return null;
+        if(!cycleFound)
+            return null;
+        n1=head;
+        while(n1 != n2){
+            n1 = n1.next;
+            n2 = n2.next;
+        }
+        return n1;
     }
 }
