@@ -1,0 +1,52 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+/*
+The idea : When you traverse a binary tree in-order you get a sorted(increasing) sequence.
+If 2 non-adjacent nodes have been swapped, you will get two pairs in the sequence where the first node val is greater than the other.
+In such a case swap the bigger number in the first pair with the smaller value in the second.
+If two adjacent nodes have been swapped, you will get one pair in the sequence where the first node val is greater than the other.
+In such a case swap these two nodes.
+*/
+class Solution {
+    private TreeNode[] mistakes = new TreeNode[2];
+    private TreeNode prevInOrderNode = null;
+    public void recoverTree(TreeNode root) {
+        inOrderTraversal(root);
+        int tempVal = mistakes[0].val;
+        mistakes[0].val = mistakes[1].val;
+        mistakes[1].val = tempVal;
+    }
+    private void inOrderTraversal(TreeNode node){
+        if(node != null){
+            inOrderTraversal(node.left);
+            /*
+            The point of doing an in-order traversal is to start with the smallest value node and continue in an increasing sequence.
+            the left-most child in the tree(smallest-value child)should be out first prevInOrderNode.
+            we compare the prev node with the current to find decreasing value pairs.
+            */
+            if(prevInOrderNode != null){
+                if(prevInOrderNode.val > node.val){
+                    if(mistakes[0] == null){
+                        mistakes[0] = prevInOrderNode;
+                    }
+                    mistakes[1] = node;
+                }
+            }
+            prevInOrderNode = node;
+            inOrderTraversal(node.right);
+        }
+    }
+}
