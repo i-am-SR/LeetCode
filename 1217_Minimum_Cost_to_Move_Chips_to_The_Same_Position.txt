@@ -1,0 +1,13 @@
+class Solution {
+    public int minCostToMoveChips(int[] position) {
+        int i = 0, cionsAtOddIndex = 0, coinsAtEvenIndex = 0;
+        for(int pos: position){
+            if(pos % 2 == 0){
+                coinsAtEvenIndex++;
+            }
+            else
+                cionsAtOddIndex++;
+        }
+        return Math.min(coinsAtEvenIndex, cionsAtOddIndex);
+    }
+}
