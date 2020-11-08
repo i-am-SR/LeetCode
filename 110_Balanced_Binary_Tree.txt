@@ -15,13 +15,23 @@
  */
 class Solution {
     public boolean isBalanced(TreeNode root) {
-        if(root == null)
-            return true;
-        return isBalanced(root.left) && isBalanced(root.right) && (Math.abs(findHeight(root.left) - findHeight(root.right)) <= 1);
+        return findHeight(root) != -1;
     }
+    /*
+    Function the return the height of the node
+    it returns -1 if the node itself is unbalanced (i.e. the absolute height difference is > 1) or one of its children is unbalanced
+    */
     private int findHeight(TreeNode node){
         if(node == null)
             return 0;
-        return Math.max(findHeight(node.left), findHeight(node.right)) + 1;
+        int leftHeight = findHeight(node.left);
+        if(leftHeight == -1)
+            return -1;
+        int rightHeight = findHeight(node.right);
+        if(rightHeight == -1)
+            return -1;
+        if(Math.abs(leftHeight - rightHeight) > 1)
+            return -1;
+        return Math.max(leftHeight, rightHeight) + 1;            
     }
 }
