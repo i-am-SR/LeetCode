@@ -1,16 +1,31 @@
-class Solution {
+lass Solution {
     public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
-        int side1 = getLength(p1, p2);
-        int side2 = getLength(p1, p3);
-        int side3 = getLength(p1, p4);
-        if(side1 == 0 || side2 ==0 || side3 == 0)
+        int side1 = euclidean_distance_sq(p1, p2), side2 = euclidean_distance_sq(p1, p3), side3 = euclidean_distance_sq(p1, p4);
+        int side_next = 0;
+        if(side1 == 0 || side2 == 0 || side3 == 0)
             return false;
-        if((side1 == side2 && side3 == 2*side1 && getLength(p4,p2) == getLength(p4,p3)) || (side3 == side2 && side1 == 2*side2 && getLength(p4,p2) == getLength(p2,p3)) || (side1 == side3 && side2 == 2*side1 && getLength(p3,p2) == getLength(p4,p3)))
-            return true;
-        else return false;
+        if(side1 == side2){
+            if(side3 == 2 * side1)
+                return euclidean_distance_sq(p4, p3) == euclidean_distance_sq(p4, p2);
+            else
+                return false;
+        }
+        else if(side1 == side3){
+            if(side2 == 2 * side1)
+                return euclidean_distance_sq(p4, p3) == euclidean_distance_sq(p3, p2);
+            else
+                return false;
+        }
+        else if(side2 == side3){
+            if(side1 == 2 * side2)
+                return euclidean_distance_sq(p4, p2) == euclidean_distance_sq(p3, p2);
+            else
+                return false;
+        }
+        else
+            return false;
     }
-    private int getLength(int []p1, int []p2)
-    {
-        return (p1[0] - p2[0])*(p1[0] - p2[0]) + (p1[1] - p2[1])*(p1[1] - p2[1]);
+    private int euclidean_distance_sq(int[] p, int[]q){
+        return (p[0]-q[0]) * (p[0]-q[0]) + (p[1]-q[1]) * (p[1]-q[1]);
     }
 }
