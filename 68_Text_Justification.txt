@@ -1,0 +1,58 @@
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<>();
+        int startIndex = 0, currIndex = 0, currChars = 0, lastChars = 0;
+        StringBuilder currSB;
+        while(currIndex < words.length){
+            currSB = new StringBuilder();
+            while(currIndex < words.length){
+                lastChars = currChars;
+                if(currChars > 0)
+                    currChars++;
+                currChars += words[currIndex].length();
+                if(currChars > maxWidth)
+                    break;
+                currIndex++;
+            }
+            if(currIndex == words.length)
+                lastChars = currChars;
+            int numOfBlanks = currIndex - startIndex - 1;
+            int spaces_left = 0;
+            currSB.append(words[startIndex]);
+            if(numOfBlanks <= 0){
+                spaces_left = maxWidth - lastChars;
+                for(int j = 0; j < spaces_left; j++){
+                   currSB.append(" "); 
+                }   
+            }
+            else{
+                String []spaces = new String[numOfBlanks];
+                for(int j = 0; j < numOfBlanks; j++)
+                    spaces[j] = new String(" ");
+                spaces_left = maxWidth - lastChars;
+                int i = 0;
+                if(currIndex != words.length){
+                    while(spaces_left > 0){
+                        spaces[(i) % numOfBlanks] = spaces[(i++) % numOfBlanks] + " ";
+                        spaces_left--;
+                    }
+                }
+                for(int j = 0; j < numOfBlanks; j++){
+                    currSB.append(spaces[j]);
+                    currSB.append(words[startIndex + j + 1]);
+                }  
+                if(currIndex == words.length){
+                    while(spaces_left > 0){
+                        currSB.append(" ");
+                        spaces_left--;
+                    }
+                }
+            }
+            startIndex = currIndex;
+            lastChars = 0;
+            currChars = 0;
+            result.add(currSB.toString());
+        }
+        return result;
+    }
+}
