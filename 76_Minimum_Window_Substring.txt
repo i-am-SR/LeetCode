@@ -1,46 +1,60 @@
 class Solution {
     public String minWindow(String s, String t) {
-        int start=0,end=0,minLen=Integer.MAX_VALUE,final_s=0,final_e=0;
-        String result="";
-        if(t.length()==0 || s.length()<t.length())
-            return result;
-        Map<Character,Integer> count=new HashMap<>();
-        for(char c:t.toCharArray())
-            count.put(c, count.getOrDefault(c,0)-1);
-        while(end<s.length())
-        {
-            if(count.containsKey(s.charAt(end)))
-            {
-                count.put(s.charAt(end), count.getOrDefault(s.charAt(end),0)+1);
-            if(allFound(count))
-            {
-                while(start<end+1 && allFound(count))
-                {
-                    if(count.containsKey(s.charAt(start)))
-                        count.put(s.charAt(start), count.getOrDefault(s.charAt(start),0)-1);
-                    start++;
+        if(t.length() == 0 || s.length() < t.length())
+            return "";
+        Map<Character, Integer> tCharCount = new HashMap<>();
+        // Put the frequencies of the characters in t in the map
+        for(char c: t.toCharArray()){
+            tCharCount.put(c, tCharCount.getOrDefault(c, 0) + 1);
+        }
+        /*
+        Using a sliding window from 'start' to 'end'
+        */
+        int start = 0, end = 0;
+        /*
+        startFinal will be the starting index of the min substring
+        minLen will be the length of of the min substring
+        */
+        int startFinal = 0, minLen = Integer.MAX_VALUE;
+        /*
+        numOfCharsFound is the number of characters from t found
+        */
+        int numOfCharsFound = 0;
+        char currEnd, currStart;
+        while(end < s.length()){
+            currEnd = s.charAt(end);
+            if(tCharCount.containsKey(currEnd)){
+                tCharCount.put(currEnd, tCharCount.get(currEnd) - 1);
+                /*
+                if tCharCount.get(currEnd) >= 0 we still have characters from t we need
+                */
+                if(tCharCount.get(currEnd) >= 0)
+                    numOfCharsFound++;
+                /*
+                when numOfCharsFound == t.length() we have found atleast the min freq of characters in t => valid window. 
+                Now, slide the start forward till the window becomes invalid.
+                */
+                while(numOfCharsFound == t.length()){
+                        if((end - start) < minLen){
+                            minLen = end - start + 1;
+                            startFinal = start;
+                        }
+                        currStart = s.charAt(start);
+                        if(tCharCount.containsKey(currStart)){
+                            tCharCount.put(currStart, tCharCount.get(currStart) + 1);
+                            /*
+                            if tCharCount.get(currStart) becomes > 0, we have removed a neccessary character from t so numOfCharsFound--
+                            */
+                            if(tCharCount.get(currStart) > 0)
+                                numOfCharsFound--;
+                        }
+                        start++;
                 }
-                if(!allFound(count))
-                {
-                    if(end-start<minLen)
-                    {
-                        minLen=end-start;
-                        result=s.substring(start-1,end+1);
-                    }
-                }
-            }
             }
             end++;
         }
-        return result;
-    }
-    private boolean allFound(Map<Character,Integer> map)
-    {
-        for(Map.Entry<Character, Integer> entry: map.entrySet())
-        {
-            if(entry.getValue()<0)
-                return false;
-        }
-        return true;
+        if(minLen == Integer.MAX_VALUE)
+            return "";
+        return s.substring(startFinal, startFinal + minLen);
     }
 }
