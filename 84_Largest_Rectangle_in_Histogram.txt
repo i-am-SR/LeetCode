@@ -1,47 +1,34 @@
 class Solution {
     public int largestRectangleArea(int[] heights) {
         // Dekha
-        if(heights.length == 0)
-            return 0;
-        /*
-        To find the maximal rectangle: for each height[i], we can find the length of the interval surrounding i that has height >= height[i].
-        To find the length of this interval we create 2 arrays:
-        leftIndexLessThan: stores the index of the first value on the left that is less than heights[i].
-        rightIndexLessThan: stores the index of the first value on the right that is less than heights[i].
-        Thus length of the interval surrounding i that has height >= height[i] is (rightIndexLessThan[i] - leftIndexLessThan[i] - 1)
-        */
-        int[] leftIndexLessThan = new int[heights.length];
-        int[] rightIndexLessThan = new int[heights.length];
-        leftIndexLessThan[0] = -1;
-        rightIndexLessThan[rightIndexLessThan.length - 1] = heights.length;
-        int indexToCheck;
-        /*
-        leftIndexLessThan:
-            the first index to check (indexToCheck) is the index one less than itself.
-            then if the height at indexToCheck is greater than current height(heights[i]), the index to check will be the index where the height is less than heights[indexToCheck] and so on 
-        */
-        for(int i = 1; i < leftIndexLessThan.length; i++){
-            indexToCheck = i - 1;
-            while(indexToCheck >= 0 && heights[indexToCheck] >= heights[i]){
-                indexToCheck = leftIndexLessThan[indexToCheck];
-            }
-            leftIndexLessThan[i] = indexToCheck;
-        }
-        /*
-        rightIndexLessThan:
-            the first index to check (indexToCheck) is the index one greater than itself.
-            then if the height at indexToCheck is greater than current height(heights[i]), the index to check will be the index where the height is less than heights[indexToCheck] and so on 
-        */
-        for(int i = rightIndexLessThan.length - 2; i >= 0 ; i--){
-            indexToCheck = i + 1;
-            while(indexToCheck < heights.length && heights[indexToCheck] >= heights[i]){
-                indexToCheck = rightIndexLessThan[indexToCheck];
-            }
-            rightIndexLessThan[i] = indexToCheck;
-        }
         int maxArea = 0;
-        for(int i = 0; i < heights.length; i++){
-            maxArea = Math.max(maxArea, (rightIndexLessThan[i] - leftIndexLessThan[i] - 1) * heights[i]);
+        Stack<Integer> stack = new Stack<>(); // stack that stores the currently viewed indexes in increasing order of their heights
+        int i, currHeight;
+        for(i = 0; i <= heights.length; i++){
+            currHeight = (i == heights.length ? 0 : heights[i]);
+            if(stack.isEmpty() || currHeight >= heights[stack.peek()]){
+                stack.push(i);
+            }
+            else{
+                    int topIndex = stack.pop();
+                    int area = heights[topIndex]; //put the height in area. we will multiply it with the width to get the actual area
+                    /*
+                    if stack is empty => the topIndex contains the lowest height seen till now.
+                    This means that all the indexes seen till(i) now have heights >= this height
+                    */
+                    if(stack.isEmpty()){
+                        area *= i;
+                    }
+                    /*
+                    if stack is not empty => the next top value on the stack is the index where the height is lower than the heights from topIndex to i-1
+                    So, the width of heights[topIndex] will be i - 1 - stack.peek()
+                    */
+                    else{
+                        area *= i - 1 - stack.peek();
+                    }
+                    maxArea = Math.max(maxArea, area);
+                    i--; // so that we dont move to the next height index until all the bigger height indexes are popped
+            }
         }
         return maxArea;
     }
