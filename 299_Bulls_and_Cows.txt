@@ -19,3 +19,28 @@ class Solution {
         return new String(totalBulls + "A" + totalCows + "B");
     }
 }
+
+========================================New Solution=========================
+
+class Solution {
+    public String getHint(String secret, String guess) {
+        int bulls = 0, cows = 0;
+        int []numFreq = new int[10];
+        for(int i = 0; i < secret.length(); i++){
+            if(secret.charAt(i) == guess.charAt(i)){
+                bulls++;
+            }
+            else{
+                // if we had seen the curr char in secret in guess till now, its freq will be +ve => its a cow
+                if(numFreq[secret.charAt(i) - '0'] > 0)
+                    cows++;
+                // if we had seen the curr char in guess in secret till now, its freq will be -ve => its a cow
+                if(numFreq[guess.charAt(i) - '0'] < 0)
+                    cows++;
+                numFreq[secret.charAt(i) - '0']--;
+                numFreq[guess.charAt(i) - '0']++;
+            }
+        }
+        return new String(bulls + "A" + cows + "B");
+    }
+}
