@@ -1,0 +1,41 @@
+class Solution {
+    private int[] heightOfHistogram;
+    public int maximalRectangle(char[][] matrix) {
+        int rows = matrix.length;
+        if(rows == 0)
+            return 0;
+        int cols = matrix[0].length;
+        if(cols == 0)
+            return 0;
+        int maxArea = 0, topIndex;
+        heightOfHistogram= new int[cols + 1];
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < rows; i++){
+            maxArea = Math.max(maxArea, maxAreaOfHistogram(matrix, i));
+        }
+        return maxArea;
+    }
+    /*
+    This function makes use of the solution to Leetcode 84
+    */
+    private int maxAreaOfHistogram(char[][] matrix, int i){
+        Stack<Integer> stack = new Stack<>();
+        int maxArea = 0, topIndex;
+        boolean pushed = true; // heightOfHistogram needs to be updated only when j is incremented i.e. we pushed a new value to the stack
+        for(int j = 0; j < heightOfHistogram.length; j++){   
+                if(pushed)
+                    heightOfHistogram[j] = ((j == (heightOfHistogram.length - 1) || matrix[i][j] == '0') ? 0 : heightOfHistogram[j] + 1);
+                if(stack.isEmpty() || (heightOfHistogram[j] >= heightOfHistogram[stack.peek()])){
+                    stack.push(j);
+                    pushed = true;
+                }
+                else{
+                    topIndex = stack.pop();
+                    maxArea = Math.max(maxArea, heightOfHistogram[topIndex] * (stack.isEmpty() ? j : (j - 1 - stack.peek())));
+                    j--;
+                    pushed = false;
+                }
+            }
+        return maxArea;
+    }
+}
