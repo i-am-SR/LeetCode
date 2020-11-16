@@ -1,0 +1,56 @@
+class Solution {
+    public int[] threeEqualParts(int[] A) {
+        //find the number of ones
+        int numOfOnes = 0;
+        int[] result = new int[]{-1, -1};
+        for(int digit: A){
+            numOfOnes += (digit == 0 ? 0 : 1);
+        }
+        //if 0 => return [0,2]
+        if(numOfOnes == 0){
+            result[0] = 0;
+            result[1] = 2;
+            return result;
+        }
+        // if number of ones % 3 != 0 return [-1,-1]
+        if(numOfOnes % 3 != 0){
+            return result;
+        }
+        // find the start index of the right most number with ones = number of ones / 3
+        int countOnes = 0, currIndex = A.length - 1;
+        while(countOnes < (numOfOnes / 3)){
+            countOnes += (A[currIndex--] == 0 ? 0 : 1);
+        }
+        int thirdNumStartIndex = currIndex + 1;
+        //System.out.println(thirdNumStartIndex);
+        currIndex = 0;
+        // if the first number desn't exists with leading 0's then return [-1,-1]
+        while(A[currIndex] == 0)
+            currIndex++;
+        int firstNumEndIndex = findEndIndex(A, currIndex, thirdNumStartIndex);
+        if(firstNumEndIndex < 0)
+            return result;
+        currIndex = firstNumEndIndex + 1;
+        while(A[currIndex] == 0)
+            currIndex++;
+        // if the second number desn't exists with leading 0's then return [-1,-1]
+        int secondNumEndIndex = findEndIndex(A, currIndex, thirdNumStartIndex);
+        if(secondNumEndIndex < 0)
+            return result;
+        // return [ending index of first num, ending index of second num]
+        result[0] = firstNumEndIndex;
+        result[1] = secondNumEndIndex + 1;
+        return result;
+    }
+    private int findEndIndex(int[] A, int first, int thirdNumStartIndex){
+        int second = thirdNumStartIndex;
+        while(second < A.length){
+            if(A[first] != A[second] || first == thirdNumStartIndex){
+                return -1;
+            }
+            first++;
+            second++;
+        }
+        return first - 1;  
+    }
+}
