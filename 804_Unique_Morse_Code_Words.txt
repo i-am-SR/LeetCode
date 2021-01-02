@@ -1,0 +1,15 @@
+class Solution {
+    public int uniqueMorseRepresentations(String[] words) {
+        String []morseWords = new String[]{".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        Set<String> unique = new HashSet<>();
+        StringBuilder currMorse;
+        for(String word: words){
+            currMorse = new StringBuilder();
+            for(char c: word.toCharArray()){
+                currMorse.append(morseWords[c - 'a']);
+            }
+            unique.add(currMorse.toString());
+        }
+        return unique.size();
+    }
+}
