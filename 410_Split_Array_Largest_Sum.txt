@@ -1,0 +1,43 @@
+class Solution {
+    /*
+    T0 convert this into a binary search problem, let us consider the largest sum of the minimum and maximum subarray sums for any problem.
+    the largest sum of minimum subarray sum will be the value of the largest element in the array
+    the largest sum of minimum subarray will be the total sum of the subarray itself
+    So, the minimum largest sum among these m subarrays should lie between these values.
+    => binary search : if the number of partitions with mid as the largest sum among subarrays is more than m, then the value of mid is small, we need to search towards it right
+    else search towards its left (as when we get m subsrrays with a value mid, there can still be a smaller mid value that gives us the same number of subarrays)
+    when lo == hi, we get the min value that satisfies the condition.
+    */
+    public int splitArray(int[] nums, int m) {
+        int maxOfMin = 0, totalSum = 0;
+        for(int num: nums){
+            totalSum += num;
+            maxOfMin = Math.max(maxOfMin, num);
+        }
+        int lo = maxOfMin, hi = totalSum, mid = 0, numOfPartitions = 0;
+        while(lo < hi){
+            mid = lo + (hi - lo) / 2;
+            numOfPartitions = findPartitions(nums, mid);
+            if(numOfPartitions > m){
+                lo = mid + 1;
+            }
+            else{
+                hi = mid;
+            }
+        }
+        return lo;
+    }
+    private int findPartitions(int[] nums, int maxSumOfPartition){
+        int currSum = 0, partitions = 1;
+        for(int num: nums){
+            if(currSum + num > maxSumOfPartition){
+                currSum = num;
+                partitions++;
+            }
+            else{
+                currSum += num;
+            }
+        }
+        return partitions;
+    }
+}
