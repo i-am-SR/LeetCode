@@ -1,0 +1,33 @@
+class Solution {
+    public boolean canFormArray(int[] arr, int[][] pieces) {
+        Map<Integer, List<int[]>> pieceMap = new HashMap<>();
+        for(int[] piece: pieces){
+            if(piece.length > 0)
+            {
+                List<int[]> curr = pieceMap.getOrDefault(piece[0], new ArrayList<>());
+                curr.add(piece);
+                pieceMap.put(piece[0], curr);
+            }
+        }
+        boolean[] possible = new boolean[arr.length + 1];
+        possible[0] = true;
+        int j;
+        for(int i = 0; i < arr.length; i++){
+            if(possible[i] && pieceMap.containsKey(arr[i])){
+                for(int[] piece: pieceMap.get(arr[i])){
+                    for(j = 1; j < piece.length; j++){
+                        if(arr[i + j] != piece[j]){
+                            break;
+                        }
+                    }
+                    if(j == piece.length){
+                        if((i + piece.length) == (arr.length))
+                            return true;
+                        possible[i + piece.length] = true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
