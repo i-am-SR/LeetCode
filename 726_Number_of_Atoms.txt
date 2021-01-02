@@ -1,0 +1,55 @@
+class Solution {
+    public String countOfAtoms(String formula) {
+        Stack<Map<String, Integer>> stack = new Stack<>();
+        Map<String, Integer> freqMap = new HashMap<>();
+        int idx = 0;
+        int len = formula.length();
+        int currCount = 0;
+        while(idx < len){
+            if(formula.charAt(idx) == '('){
+                stack.push(freqMap);
+                freqMap = new HashMap<>();
+                idx++;
+            }
+            else if(formula.charAt(idx) == ')'){
+                idx++;
+                int count = 0;
+                while(idx < len && Character.isDigit(formula.charAt(idx))){
+                    count = count * 10 + (formula.charAt(idx) - '0');
+                    idx++;
+                }
+                if(count == 0)
+                    count = 1;
+                Map<String, Integer> tempFreqMap = freqMap;
+                freqMap = stack.pop();
+                for(String key: tempFreqMap.keySet()){
+                    freqMap.put(key, freqMap.getOrDefault(key, 0) + tempFreqMap.get(key) * count);
+                }
+            }
+            else{
+                int startIdx = idx;
+                idx++;
+                while(idx < len && Character.isLowerCase(formula.charAt(idx))){
+                    idx++;
+                }
+                String element = formula.substring(startIdx, idx);
+                int count = 0;
+                while(idx < len && Character.isDigit(formula.charAt(idx))){
+                    count = count * 10 + (formula.charAt(idx) - '0');
+                    idx++;
+                }
+                if(count == 0)
+                    count = 1;
+                freqMap.put(element, freqMap.getOrDefault(element, 0) + count);
+            }
+        }
+        List<String> elements = new ArrayList(freqMap.keySet());
+        Collections.sort(elements);
+        StringBuilder result = new StringBuilder();
+        for(String elem: elements){
+            result.append(elem);
+            result.append(freqMap.get(elem) == 1 ? "": freqMap.get(elem));
+        }
+        return result.toString();
+    }
+}
