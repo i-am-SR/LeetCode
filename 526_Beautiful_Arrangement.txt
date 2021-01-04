@@ -1,0 +1,23 @@
+class Solution {
+    private int count = 0;
+    public int countArrangement(int n) {
+        boolean[] used = new boolean[n + 1];
+        backtrack(n, n, used);
+        return count;
+    }
+    /*
+    I start the backtrack function from the back becasue the smaller elements have a higher chance of 
+    being divisible by the index and vice versa
+    */
+    private void backtrack(int i, int n, boolean[] used){
+        if(i == 0)
+            count++;
+        for(int j = n; j > 0 ; j--){
+            if(!used[j] && (j % i == 0 || i % j == 0)){
+                used[j] = true;
+                backtrack(i - 1, n, used);
+                used[j] = false;
+            }
+        }
+    }
+}
