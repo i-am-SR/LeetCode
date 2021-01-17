@@ -1,0 +1,26 @@
+class Solution {
+    // Dekha DP solution (bottom - up)
+    public boolean isMatch(String s, String p) {
+        boolean [][]match = new boolean[s.length()+1][p.length()+1];
+        match[s.length()][p.length()] = true;
+        for(int i = s.length(); i >= 0; i--){
+            for(int j = p.length() - 1; j >= 0; j--){
+                boolean res = false;
+                // check if the chars at i and j match
+                boolean curr_match = i < s.length() && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '.');
+                if(j < p.length() - 1 && p.charAt(j + 1) == '*'){
+                    // case1: '*' means zero of the preceding element => so compare i with j + 2
+                    res = match[i][j + 2];
+                    // case2: '*' means multiple of the preceding element => so compare i + 1 with j
+                    res = res || ( curr_match && match[i + 1][j] );
+                }
+                // else if current chars (i and j) match, then check if the nexe ones do
+                else{
+                    res = curr_match && match[i + 1][j + 1]; 
+                }
+                match[i][j] = res;
+            }
+        }
+        return match[0][0];
+    }
+}
