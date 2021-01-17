@@ -1,0 +1,21 @@
+class Solution {
+    public int countVowelStrings(int n) {
+        // Bottom-up DP
+        int[][] dp= new int[n+1][6];
+        /*
+        dp[i][j] signifies the number of ways you can use j letters to fill i spaces
+        */
+        for(int k = 0; k < 6; k++){
+            dp[0][k] = 1;
+        }
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j < 6; j++){
+                //use the same letter as last time again
+                dp[i][j] += dp[i-1][j];
+                //use the next letter => now only j - 1 letters left to use 
+                dp[i][j] += dp[i][j - 1];
+            }
+        }
+        return dp[n][5];
+    }
+}
