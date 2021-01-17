@@ -1,0 +1,57 @@
+class Solution {
+    // Tarjan's Algorithms
+    
+    public List<Integer>[] graph;
+    public List<List<Integer>> criticalCons;
+    public int[] visitedTime;
+    public int[] lowestReachableTime;
+    public int time;
+    
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        time = 0;
+        graph = new ArrayList[n];
+        visitedTime = new int[n];
+        lowestReachableTime = new int[n];
+        criticalCons = new ArrayList<>();
+        
+        buildGraph(connections);
+        
+        boolean[] visited = new boolean[n];
+        
+        dfs(0, -1, visited);
+        return criticalCons;
+    }
+    
+    private void dfs(int currNode, int parentNode, boolean[] visited){
+        visited[currNode] = true;
+        visitedTime[currNode] = lowestReachableTime[currNode] = time++;
+        for(int childNode: graph[currNode]){
+            if(childNode == parentNode)
+                continue;
+            if(!visited[childNode]){
+                dfs(childNode, currNode, visited);
+                // back-propogate the updated lowestReachableTime
+                lowestReachableTime[currNode] = Math.min(lowestReachableTime[currNode], lowestReachableTime[childNode]);
+                // if the childNode cannot reach a node that has visitedTime less than its parent(currNode) => currNode is a critical Node.
+                if(visitedTime[currNode] < lowestReachableTime[childNode]){
+                    criticalCons.add(Arrays.asList(currNode, childNode));
+                }
+            }
+            else{
+                // this means that parentNode is not a critical connection as currNode can connect to a node that has been visited before parent => update the lowestReachableTime for currNode.
+                lowestReachableTime[currNode] = Math.min(lowestReachableTime[currNode], visitedTime[childNode]);
+            }
+        }
+    }
+    
+    private void buildGraph(List<List<Integer>> connections){
+        for(int i = 0; i < graph.length; i++)
+            graph[i] = new ArrayList<>();
+        for(List<Integer> conn: connections){
+            int start = conn.get(0);
+            int end = conn.get(1);
+            graph[start].add(end);
+            graph[end].add(start);        
+        }
+    }
+}
