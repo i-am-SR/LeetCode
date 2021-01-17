@@ -1,21 +1,24 @@
 class Solution {
-    public int[] productExceptSelf(int[] nums) {
-        int len = nums.length;
-        int []preProduct = new int[len];
-        int []postProduct = new int[len];
-        int []result = new int[len];
-        int prod1 = 1, prod2 = 1, i;
-        for(i = 0; i< len; i++){
-            if(i > 0){
-                prod1 *= nums[i - 1];
-                prod2 *= nums[len - i];
-            }
-            preProduct[i] = prod1;
-            postProduct[len - i - 1] = prod2;
-        }
-        for(i = 0; i< len; i++){
-            result[i] = preProduct[i] * postProduct[i];
-        }
-        return result;
+    public int countVowelStrings(int n) {
+        // Top-down DP
+        int[][] memo = new int[n+1][6];
+        /*
+        memo[i][j] signifies the number of ways you can fill i spaces using j letters
+        */
+        return dp(memo, n, 5);
     }
+    private int dp(int[][] memo, int i, int j){
+        if(i == 1 || j == 1){
+            return j;
+        }
+        if(memo[i][j] != 0)
+            return memo[i][j];
+        int res = 0;
+        for(int k = 1; k <= j ; k++){
+            // memo[i][j] is sum of all instances where i - 1 spaces were filled in <= j letters 
+            res += dp(memo, i - 1, k);
+        }
+        memo[i][j] = res;
+        return res;
+    } 
 }
