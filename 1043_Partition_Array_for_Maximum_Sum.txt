@@ -1,0 +1,21 @@
+class Solution {
+    // Top - down DP
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int[] memo = new int[arr.length];
+        return dp(arr, k, 0, memo);
+    }
+    private int dp(int[] arr, int k, int idx, int[] memo){
+        if(idx == arr.length)
+            return 0;
+        if(memo[idx] > 0)
+            return memo[idx];
+        int max = 0;
+        int result = 0;
+        for(int i = idx; i < idx + k && i < arr.length; i++){
+            max = Math.max(max, arr[i]);
+            result = Math.max(result, (i - idx + 1) * max + dp(arr, k, i + 1, memo));
+        }
+        memo[idx] = result;
+        return result;
+    }
+}
