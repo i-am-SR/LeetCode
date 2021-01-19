@@ -1,0 +1,16 @@
+class Solution {
+    public int maxOperations(int[] nums, int k) {
+        Map<Integer, Integer> freqMap = new HashMap<>();
+        int result = 0;
+        for(int num: nums){
+            if(freqMap.containsKey(k - num) && freqMap.get(k - num) > 0){
+                result++;
+                freqMap.put(k - num, freqMap.get(k - num) - 1);    
+            }
+            else{
+                freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+            }
+        }
+        return result;
+    }
+}
