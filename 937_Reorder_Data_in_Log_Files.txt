@@ -1,29 +1,27 @@
 class Solution {
     public String[] reorderLogFiles(String[] logs) {
-        Comparator<String> comp = new Comparator<String>() {  
-            public int compare(String log1, String log2){
-                int idx1 = log1.indexOf(' ');
-                int idx2 = log2.indexOf(' ');
-                char c1 = log1.charAt(idx1 + 1);
-                char c2 = log2.charAt(idx2 + 1);
-                if(Character.isDigit(c1)){
-                    if(Character.isDigit(c2)){
-                        return 0;
-                    }
-                    else
-                        return 1;
+        Comparator<String> myComp = new Comparator<>(){
+            public int compare(String s1, String s2){
+                String[] strArr1 = s1.split(" ", 2);
+                String[] strArr2 = s2.split(" ", 2);
+                boolean isDigitLog1 = Character.isDigit(strArr1[1].charAt(0));
+                boolean isDigitLog2 = Character.isDigit(strArr2[1].charAt(0));
+                if(!isDigitLog1 && !isDigitLog2){
+                    int res = strArr1[1].compareTo(strArr2[1]);
+                    return res == 0 ? strArr1[0].compareTo(strArr2[0]) : res;
                 }
-                if(Character.isDigit(c2))
+                else if(!isDigitLog1 && isDigitLog2){
                     return -1;
-                int res = log1.substring(idx1).compareTo(log2.substring(idx2));
-                if(res == 0){
-                    return log1.substring(0, idx1).compareTo(log2.substring(0, idx2));
                 }
-                else
-                    return res;
+                else if(isDigitLog1 && !isDigitLog2){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
             }
         };
-        Arrays.sort(logs, comp);
+        Arrays.sort(logs, myComp);
         return logs;
     }
 }
