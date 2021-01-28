@@ -1,0 +1,17 @@
+class Solution {
+    public int concatenatedBinary(int n) {
+        int result = 0;
+        int i = 1;
+        for(int j = 1; j < 20; j++){
+            while(i < Math.pow(2, j)){
+                if(i == n+1)
+                    return (int)result;
+                for(int k = 0; k < j; k++)
+                    result = (result << 1) % 1000000007;
+                result += i;
+                i++;
+            }
+        }
+        return (int)result;
+    }
+}

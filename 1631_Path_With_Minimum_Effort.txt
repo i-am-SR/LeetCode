@@ -1,0 +1,35 @@
+class Solution {
+    private int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    public int minimumEffortPath(int[][] heights) {
+        int len = heights.length;
+        int wid = heights[0].length;
+        int[][] dp = new int[len][wid];
+        for(int i = 0; i< len; i++){
+            for(int j = 0; j < wid; j++){
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        dp[0][0] = 0;
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        minHeap.offer(new int[]{0,0,0});
+        while(!minHeap.isEmpty()){
+            int[] curr = minHeap.poll();
+            // System.out.println(curr[0] + ", " + curr[1] + " -> " + curr[2]);
+            if(curr[0] == len - 1 && curr[1] == wid - 1)
+                return curr[2];
+            for(int[] dir: dirs){
+                int x = curr[0] + dir[0];
+                int y = curr[1] + dir[1];
+                int effort;
+                if(x >= 0 && x < len && y >= 0 && y < wid){
+                    effort = Math.max(curr[2], Math.abs(heights[x][y] - heights[curr[0]][curr[1]]));
+                    if(effort < dp[x][y]){
+                        dp[x][y] = effort;
+                        minHeap.offer(new int[]{x, y, effort});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
