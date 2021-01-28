@@ -1,16 +1,18 @@
 class Solution {
     public String getSmallestString(int n, int k) {
-        StringBuilder result = new StringBuilder();
-        for(int i = 0; i < n; i++){
-            if(k - 1 > (n - i - 1) * 26){ // if the rest of the places cannot be filled with all z's then we need to place a charater greater than a
-                result.append((char)('a' + (k - (n - i - 1) * 26) - 1));
-                k = (n - i - 1) * 26;
+        char[] res = new char[n];
+        Arrays.fill(res, 'a');
+        k -= n; // all chars are a initially
+        for(int i = n - 1; k > 0 && i >= 0; i--){ // assign the greater chars from the end
+            if(k > 25){
+                res[i] += 25;
+                k -= 25;
             }
             else{
-                result.append("a");
-                k--;
+                res[i] += k;
+                k = 0;
             }
         }
-        return result.toString();        
+        return new String(res);        
     }
 }
