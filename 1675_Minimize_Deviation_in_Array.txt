@@ -1,0 +1,23 @@
+class Solution {
+    public int minimumDeviation(int[] nums) {
+        Queue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        int min = Integer.MAX_VALUE;
+        for(int num: nums){
+            if(num % 2 != 0)
+                num *= 2;
+            maxHeap.offer(num);
+            min = Math.min(min, num);
+        }
+        int result = Integer.MAX_VALUE;
+        int curr = 0;
+        while(curr % 2 == 0){
+            curr = maxHeap.poll();
+            result = Math.min(result, curr - min);
+            if(curr % 2 == 0){
+                maxHeap.offer(curr / 2);
+                min = Math.min(min, curr / 2);
+            }
+        }
+        return result;
+    }
+}
