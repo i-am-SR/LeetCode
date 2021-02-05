@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private Map<Integer, List<int[]>> map = new HashMap<>();
+    private int min = 0, max = 0;
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        traverse(root, 0, 0);
+        for(int i = min; i <= max; i++){
+            List<int[]> temp = map.get(i);
+            Collections.sort(temp, (a, b) -> (a[1] == b[1] ? a[0] - b[0]: b[1] - a[1]));
+            List<Integer> curr = new ArrayList<>();
+            for(int[] arr: temp){
+                curr.add(arr[0]);
+            }
+            result.add(curr);
+        }
+        return result;
+    }
+    private void traverse(TreeNode node, int x, int y){
+        if(node != null){
+            min = Math.min(min, x);
+            max = Math.max(max, x);
+            map.putIfAbsent(x, new ArrayList<>());
+            map.get(x).add(new int[]{node.val, y});
+            traverse(node.left, x - 1, y - 1);
+            traverse(node.right, x + 1, y - 1);
+        }
+    }
+}
