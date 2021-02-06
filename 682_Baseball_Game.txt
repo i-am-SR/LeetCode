@@ -1,0 +1,28 @@
+class Solution {
+    public int calPoints(String[] ops) {
+        List<Integer> l = new ArrayList<>();
+        for(String op: ops){
+            char curr = op.charAt(op.length() - 1);
+            if(Character.isDigit(curr)){
+                l.add(Integer.parseInt(op));
+            }
+            else{
+                int size = l.size();
+                if(curr == 'C'){
+                    l.remove(size - 1);
+                }
+                else if(curr == 'D'){
+                    l.add(l.get(size - 1) * 2);
+                }
+                else if(curr == '+'){
+                    l.add(l.get(size - 1) + l.get(size - 2));
+                }
+            }
+        }
+        int res = 0;
+        for(int x: l){
+            res += x;
+        }
+        return res;
+    }
+}
