@@ -1,0 +1,32 @@
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        int n = isConnected.length;
+        Set<Integer> visited = new HashSet<>();
+        int numProvinces = 1, citiesVisited = 0;
+        Queue<Integer> q = new LinkedList<>();
+        for(int curr = 0; curr < n; curr++){
+            if(visited.contains(curr)){
+                continue;
+            }
+            q.offer(curr);
+            visited.add(curr);
+            citiesVisited++;
+            if(citiesVisited == n)
+                return numProvinces;
+            while(!q.isEmpty()){
+                int city = q.poll();
+                for(int i = 0; i < n; i++){
+                    if(i != city && !visited.contains(i) && (isConnected[city][i] == 1 || isConnected[i][city] == 1)){
+                        q.offer(i);
+                        visited.add(i);
+                        citiesVisited++;
+                        if(citiesVisited == n)
+                            return numProvinces;
+                    }
+                }
+            }
+            numProvinces++;
+        }
+        return numProvinces;
+    }
+}
