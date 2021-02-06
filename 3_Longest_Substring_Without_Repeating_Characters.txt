@@ -1,0 +1,18 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if(s.length() == 0)
+            return 0;
+        int res = 0;
+        Map<Character, Integer> indexMap = new HashMap<>();
+        int len = s.length(), start = -1;
+        for(int i = 0; i< len; i++){
+            char curr = s.charAt(i);
+            if(indexMap.containsKey(curr)){
+                start = Math.max(start, indexMap.get(curr)); // important line => start has to be updated
+            }
+            res = Math.max(res, i - start);
+            indexMap.put(curr, i);
+        }
+        return res;
+    }
+}
